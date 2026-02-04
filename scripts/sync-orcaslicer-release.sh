@@ -21,18 +21,17 @@ fi
 
 LATEST_JSON="$(curl -fsSL -H "Accept: application/vnd.github+json" "${AUTH_HEADER[@]}" "${API_URL}")"
 
-LATEST_TAG="$(python3 - <<'PY'
+LATEST_TAG="$(python3 -c '
 import json, sys
 try:
-    data = json.loads(sys.stdin.read())
+    data = json.load(sys.stdin)
 except json.JSONDecodeError as exc:
     print(f"Failed to parse JSON: {exc}", file=sys.stderr)
     sys.exit(2)
 
 tag = (data.get("tag_name") or "").strip()
 print(tag)
-PY
-<<<"${LATEST_JSON}")"
+' <<<"${LATEST_JSON}")"
 
 if [[ -z "${LATEST_TAG}" ]]; then
   echo "Could not determine latest tag from ${API_URL}" >&2
@@ -49,14 +48,14 @@ if [[ "${LATEST_TAG}" != "${CURRENT_TAG}" ]]; then
   TAG_CHANGED="1"
 fi
 
-python3 - "${JSON_FILE}" "${MD_FILE}" "${STATE_FILE}" "${WIN_PORTABLE_JSON_FILE}" "${WIN_PORTABLE_MD_FILE}" <<'PY'
+python3 -c '
 import json
 import sys
 from pathlib import Path
 
 json_file, md_file, state_file, win_json_file, win_md_file = sys.argv[1:6]
 
-data = json.loads(sys.stdin.read())
+data = json.load(sys.stdin)
 
 assets_raw = data.get("assets") or []
 assets = []
@@ -206,8 +205,7 @@ if mirror_url:
 win_md_lines.append("")
 
 Path(win_md_file).write_text("\n".join(win_md_lines))
-PY
-<<<"${LATEST_JSON}"
+' "${JSON_FILE}" "${MD_FILE}" "${STATE_FILE}" "${WIN_PORTABLE_JSON_FILE}" "${WIN_PORTABLE_MD_FILE}" <<<"${LATEST_JSON}"
 
 if [[ "${TAG_CHANGED}" == "1" ]]; then
   echo "New upstream release detected: ${CURRENT_TAG:-<none>} -> ${LATEST_TAG}"
