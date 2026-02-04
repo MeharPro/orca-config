@@ -40,8 +40,8 @@ jobs:
           git commit -m "Sync OrcaSlicer release $(cat releases/latest_tag.txt)"
           git push
 
-      - name: Mirror Windows portable asset to GitHub Release
-        if: steps.changes.outputs.changed == 'true'
+      - name: Build Windows portable (with configs) and publish GitHub Release
+        if: steps.changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -50,19 +50,21 @@ jobs:
           TAG="$(cat releases/latest_tag.txt)"
           ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
           ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
+          CUSTOM_ASSET_NAME="${ASSET_NAME%.zip}_with_configs.zip"
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
-          (cd .tmp && sha256sum "${ASSET_NAME}" > "${ASSET_NAME}.sha256")
+          bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME}"
+          (cd .tmp && sha256sum "${CUSTOM_ASSET_NAME}" > "${CUSTOM_ASSET_NAME}.sha256")
 
           NOTES_FILE=".tmp/release-notes.md"
           cat releases/LATEST_RELEASE.md releases/WINDOWS_PORTABLE.md > "${NOTES_FILE}"
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" ".tmp/${ASSET_NAME}" ".tmp/${ASSET_NAME}.sha256" --clobber
-            gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable)" --notes-file "${NOTES_FILE}"
+            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" --clobber
+            gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}"
           else
-            gh release create "${TAG}" ".tmp/${ASSET_NAME}" ".tmp/${ASSET_NAME}.sha256" \
-              --title "OrcaSlicer ${TAG} (Windows Portable)" \
+            gh release create "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" \
+              --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
               --notes-file "${NOTES_FILE}"
           fi

@@ -44,9 +44,9 @@ if [[ -f "${STATE_FILE}" ]]; then
   CURRENT_TAG="$(cat "${STATE_FILE}")"
 fi
 
-if [[ "${LATEST_TAG}" == "${CURRENT_TAG}" ]]; then
-  echo "No new release. Latest tag remains ${LATEST_TAG}."
-  exit 0
+TAG_CHANGED="0"
+if [[ "${LATEST_TAG}" != "${CURRENT_TAG}" ]]; then
+  TAG_CHANGED="1"
 fi
 
 python3 - "${JSON_FILE}" "${MD_FILE}" "${STATE_FILE}" "${WIN_PORTABLE_JSON_FILE}" "${WIN_PORTABLE_MD_FILE}" <<'PY'
@@ -209,4 +209,8 @@ Path(win_md_file).write_text("\n".join(win_md_lines))
 PY
 <<<"${LATEST_JSON}"
 
-echo "Updated release files for ${LATEST_TAG}."
+if [[ "${TAG_CHANGED}" == "1" ]]; then
+  echo "New upstream release detected: ${CURRENT_TAG:-<none>} -> ${LATEST_TAG}"
+else
+  echo "No new upstream release. Latest tag remains ${LATEST_TAG}."
+fi
