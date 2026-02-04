@@ -328,35 +328,98 @@
       (async function init() {
         const status = $("statusPill");
         try {
-          const [latest, win] = await Promise.all([fetchJson("releases/latest.json"), fetchJson("releases/windows_portable.json")]);
+          const MIRROR_REPO = "MeharPro/orca-config";
+          const UPSTREAM_REPO = "OrcaSlicer/OrcaSlicer";
 
-          const tag = (win.tag_name || latest.tag_name || "").trim();
-          const published = latest.published_at || "";
-          const asset = (win.asset && win.asset.name) || "";
-          const upstreamUrl = latest.html_url || win.upstream_release_url || "";
+          async function fetchLatestRelease(repo) {
+            const url = `https://api.github.com/repos/${repo}/releases/latest`;
+            const res = await fetch(url, {
+              cache: "no-store",
+              headers: {
+                Accept: "application/vnd.github+json",
+              },
+            });
+            if (res.status === 404) return null;
+            if (!res.ok) throw new Error(`${url} -> ${res.status}`);
+            return await res.json();
+          }
 
-          const mirrorUrl = tag && asset
-            ? `https://github.com/MeharPro/orca-config/releases/download/${encodeURIComponent(tag)}/${encodeURIComponent(asset)}`
-            : "";
+          function isWindowsPortable(name) {
+            const n = (name || "").toLowerCase();
+            if (!n) return false;
+            if (n.endsWith(".sha256")) return false;
+            if (!n.includes("portable")) return false;
+            if (!n.includes("win") && !n.includes("windows")) return false;
+            if (n.includes("linux") || n.includes("ubuntu") || n.includes("mac") || n.includes("osx") || n.includes("darwin")) return false;
+            if (n.includes("installer") || n.includes("setup")) return false;
+            return true;
+          }
 
-          status.textContent = tag ? `synced: ${tag}` : "synced";
+          function score(name) {
+            const n = (name || "").toLowerCase();
+            let s = 0;
+            if (n.includes("portable")) s += 50;
+            if (n.includes("windows") || n.includes("win")) s += 40;
+            if (n.includes("x64") || n.includes("amd64") || n.includes("win64") || n.includes("64")) s += 15;
+            if (n.endsWith(".zip")) s += 10;
+            else if (n.endsWith(".7z")) s += 8;
+            else if (n.endsWith(".exe")) s += 2;
+            return s;
+          }
+
+          function pickWindowsPortableAsset(assets) {
+            const list = Array.isArray(assets) ? assets : [];
+            const candidates = list.filter((a) => isWindowsPortable(a && a.name));
+            if (!candidates.length) return null;
+            candidates.sort((a, b) => {
+              const sa = score(a.name);
+              const sb = score(b.name);
+              if (sb !== sa) return sb - sa;
+              const zb = Number(b.size || 0);
+              const za = Number(a.size || 0);
+              if (zb !== za) return zb - za;
+              return String(a.name || "").localeCompare(String(b.name || ""));
+            });
+            return candidates[0];
+          }
+
+          const mirrorRelease = await fetchLatestRelease(MIRROR_REPO);
+          const mirrorAsset = mirrorRelease ? pickWindowsPortableAsset(mirrorRelease.assets) : null;
+
+          const upstreamRelease = !mirrorAsset ? await fetchLatestRelease(UPSTREAM_REPO) : null;
+          const upstreamAsset = upstreamRelease ? pickWindowsPortableAsset(upstreamRelease.assets) : null;
+
+          const source = mirrorAsset ? "mirror" : upstreamAsset ? "upstream" : "none";
+          const rel = mirrorAsset ? mirrorRelease : upstreamRelease;
+          const assetObj = mirrorAsset || upstreamAsset;
+
+          const tag = ((rel && rel.tag_name) || "").trim();
+          const published = (rel && rel.published_at) || "";
+          const asset = (assetObj && assetObj.name) || "";
+          const upstreamUrl = (rel && rel.html_url) || "";
+
+          const mirrorUrl = mirrorAsset ? (mirrorAsset.browser_download_url || "") : "";
+          const downloadUrl = (assetObj && assetObj.browser_download_url) || "";
+
+          status.textContent = tag ? `${source}: ${tag}` : `${source}`;
           status.style.color = "var(--accent)";
           status.style.borderColor = "rgba(124, 244, 210, 0.35)";
 
           $("tagV").textContent = tag || "—";
           $("publishedV").textContent = fmtIso(published);
           $("assetV").textContent = asset || "—";
-          $("mirrorV").textContent = mirrorUrl || "—";
+          $("mirrorV").textContent = mirrorUrl || (source === "upstream" ? "mirror pending" : "—");
 
           const downloadBtn = $("downloadBtn");
-          downloadBtn.href = mirrorUrl || "#";
-          setDisabled(downloadBtn, !mirrorUrl);
+          downloadBtn.href = downloadUrl || "#";
+          downloadBtn.textContent = mirrorAsset ? "Download" : upstreamAsset ? "Download (Upstream)" : "Download";
+          setDisabled(downloadBtn, !downloadUrl);
 
           const upstreamBtn = $("upstreamBtn");
           upstreamBtn.href = upstreamUrl || "#";
           setDisabled(upstreamBtn, !upstreamUrl);
         } catch (err) {
-          status.textContent = "not synced yet";
+          status.textContent = "error";
           status.style.color = "var(--warn)";
           status.style.borderColor = "rgba(255, 210, 122, 0.35)";
           console.warn(err);
@@ -365,4 +428,3 @@
     </script>
   </body>
 </html>
-
