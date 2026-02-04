@@ -22,14 +22,47 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: scripts/sync-orcaslicer-release.sh
 
-      - name: Commit and push if changed
+      - name: Detect changes
+        id: changes
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add releases
-            git commit -m "Sync OrcaSlicer release $(cat releases/latest_tag.txt)"
-            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
           else
-            echo "No changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push release metadata
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add releases
+          git commit -m "Sync OrcaSlicer release $(cat releases/latest_tag.txt)"
+          git push
+
+      - name: Mirror Windows portable asset to GitHub Release
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          TAG="$(cat releases/latest_tag.txt)"
+          ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
+          ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
+
+          mkdir -p .tmp
+          curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
+          (cd .tmp && sha256sum "${ASSET_NAME}" > "${ASSET_NAME}.sha256")
+
+          NOTES_FILE=".tmp/release-notes.md"
+          cat releases/LATEST_RELEASE.md releases/WINDOWS_PORTABLE.md > "${NOTES_FILE}"
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            gh release upload "${TAG}" ".tmp/${ASSET_NAME}" ".tmp/${ASSET_NAME}.sha256" --clobber
+            gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable)" --notes-file "${NOTES_FILE}"
+          else
+            gh release create "${TAG}" ".tmp/${ASSET_NAME}" ".tmp/${ASSET_NAME}.sha256" \
+              --title "OrcaSlicer ${TAG} (Windows Portable)" \
+              --notes-file "${NOTES_FILE}"
           fi
