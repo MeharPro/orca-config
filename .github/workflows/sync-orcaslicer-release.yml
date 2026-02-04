@@ -4,6 +4,14 @@ on:
   schedule:
     - cron: "0 9 * * *"
   workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "configs/portable-overlay/**"
+      - "scripts/repackage-windows-portable.sh"
+      - "scripts/sync-orcaslicer-release.sh"
+      - ".github/workflows/sync-orcaslicer-release.yml"
 
 permissions:
   contents: write
@@ -40,17 +48,55 @@ jobs:
           git commit -m "Sync OrcaSlicer release $(cat releases/latest_tag.txt)"
           git push
 
-      - name: Build Windows portable (with configs) and publish GitHub Release
-        if: steps.changes.outputs.changed == 'true' || github.event_name == 'workflow_dispatch'
+      - name: Decide whether to rebuild portable zip
+        id: rebuild
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVENT_NAME: ${{ github.event_name }}
+          CHANGED: ${{ steps.changes.outputs.changed }}
         run: |
           set -euo pipefail
 
           TAG="$(cat releases/latest_tag.txt)"
           ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
-          ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
           CUSTOM_ASSET_NAME="${ASSET_NAME%.zip}_with_configs.zip"
+
+          NEEDS_BUILD="false"
+
+          # Always rebuild when:
+          # - upstream release metadata changed (new upstream tag or upstream asset updated)
+          # - you changed the overlay in this repo (push trigger)
+          # - workflow was manually dispatched
+          if [[ "${CHANGED}" == "true" || "${EVENT_NAME}" == "push" || "${EVENT_NAME}" == "workflow_dispatch" ]]; then
+            NEEDS_BUILD="true"
+          fi
+
+          # Self-heal: if the GitHub Release is missing our custom asset, rebuild on the next scheduled run.
+          if [[ "${NEEDS_BUILD}" != "true" ]]; then
+            if gh release view "${TAG}" --json assets >/dev/null 2>&1; then
+              if ! gh release view "${TAG}" --json assets --jq '.assets[].name' | grep -Fxq "${CUSTOM_ASSET_NAME}"; then
+                NEEDS_BUILD="true"
+              fi
+            else
+              NEEDS_BUILD="true"
+            fi
+          fi
+
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "custom_asset_name=${CUSTOM_ASSET_NAME}" >> "$GITHUB_OUTPUT"
+          echo "needs_build=${NEEDS_BUILD}" >> "$GITHUB_OUTPUT"
+
+      - name: Build Windows portable (with configs) and publish GitHub Release
+        if: steps.rebuild.outputs.needs_build == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          TAG="${{ steps.rebuild.outputs.tag }}"
+          ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
+          ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
+          CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.custom_asset_name }}"
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
