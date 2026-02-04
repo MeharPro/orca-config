@@ -17,13 +17,19 @@ function Get-GitHubJson([string]$Url) {
 Write-Host "Fetching latest mirrored release from $Repo..."
 $release = Get-GitHubJson "https://api.github.com/repos/$Repo/releases/latest"
 
-$asset = $release.assets |
-  Where-Object { $_.name -match "(?i)portable" -and $_.name -match "(?i)win" -and $_.name -match "(?i)\\.zip$" } |
-  Sort-Object -Property size -Descending |
-  Select-Object -First 1
+$assetCandidates = $release.assets |
+  Where-Object { $_.name -match "(?i)portable" -and $_.name -match "(?i)win" } |
+  Sort-Object -Property @{ Expression = {
+      if ($_.name -match "(?i)\\.zip$") { 2 }
+      elseif ($_.name -match "(?i)\\.7z$") { 1 }
+      else { 0 }
+    }; Descending = $true
+  }, @{ Expression = "size"; Descending = $true }
+
+$asset = $assetCandidates | Select-Object -First 1
 
 if (-not $asset) {
-  throw "Could not find a Windows Portable .zip asset on the latest release of $Repo."
+  throw "Could not find a Windows Portable asset on the latest release of $Repo."
 }
 
 if ((Test-Path $InstallDir) -and (-not $Force)) {
@@ -45,7 +51,18 @@ Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath -Headers @{ "User-Agent" = "orc
 
 Write-Host "Extracting to $InstallDir..."
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
-Expand-Archive -Path $zipPath -DestinationPath $InstallDir -Force
+
+if ($zipName -match "(?i)\\.zip$") {
+  Expand-Archive -Path $zipPath -DestinationPath $InstallDir -Force
+} elseif ($zipName -match "(?i)\\.7z$") {
+  $sevenZip = Get-Command "7z" -ErrorAction SilentlyContinue
+  if (-not $sevenZip) {
+    throw "Asset is a .7z archive, but '7z' is not in PATH. Install 7-Zip or download the .zip variant."
+  }
+  & $sevenZip.Source x $zipPath "-o$InstallDir" -y | Out-Null
+} else {
+  throw "Unknown archive type: $zipName"
+}
 
 # If the user cloned this repo and runs the script from it, copy their custom configs alongside the install.
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -60,4 +77,3 @@ if (Test-Path $configSource) {
 }
 
 Write-Host "Done."
-
