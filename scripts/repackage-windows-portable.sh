@@ -25,6 +25,10 @@ if ! command -v zip >/dev/null 2>&1; then
   exit 2
 fi
 
+OUT_DIR="$(dirname "${OUT_ZIP}")"
+mkdir -p "${OUT_DIR}"
+OUT_ZIP_ABS="$(cd "${OUT_DIR}" && pwd)/$(basename "${OUT_ZIP}")"
+
 WORK_DIR="$(mktemp -d)"
 cleanup() {
   rm -rf "${WORK_DIR}"
@@ -82,7 +86,6 @@ If you want to change what is injected into the portable zip, update those files
 in the repo and rerun the workflow.
 TXT
 
-mkdir -p "$(dirname "${OUT_ZIP}")"
-rm -f "${OUT_ZIP}"
+rm -f "${OUT_ZIP_ABS}"
 
-(cd "${EXTRACT_DIR}" && zip -qr -9 "${OUT_ZIP}" .)
+(cd "${EXTRACT_DIR}" && zip -qr -9 "${OUT_ZIP_ABS}" .)
