@@ -97,20 +97,22 @@ jobs:
           ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
           ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
           CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.custom_asset_name }}"
+          CONFIGS_ASSET_NAME="orca-configs_${TAG}.zip"
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
           bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME}"
           (cd .tmp && sha256sum "${CUSTOM_ASSET_NAME}" > "${CUSTOM_ASSET_NAME}.sha256")
+          zip -qr ".tmp/${CONFIGS_ASSET_NAME}" configs -x "*/.gitkeep" -x "*/.DS_Store" || true
 
           NOTES_FILE=".tmp/release-notes.md"
           cat releases/LATEST_RELEASE.md releases/WINDOWS_PORTABLE.md > "${NOTES_FILE}"
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" --clobber
+            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" ".tmp/${CONFIGS_ASSET_NAME}" --clobber
             gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}"
           else
-            gh release create "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" \
+            gh release create "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" ".tmp/${CONFIGS_ASSET_NAME}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
               --notes-file "${NOTES_FILE}"
           fi
