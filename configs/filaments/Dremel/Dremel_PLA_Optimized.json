@@ -1,0 +1,54 @@
+{
+    "type": "filament",
+    "setting_id": "Dremel_PLA_Optimized_01",
+    "name": "Dremel PLA Optimized",
+    "from": "User",
+    "instantiation": "true",
+    "inherits": "Dremel Generic PLA",
+    "filament_type": "PLA",
+    "filament_vendor": "Dremel",
+    "nozzle_temperature": [
+        "220"
+    ],
+    "nozzle_temperature_initial_layer": [
+        "225"
+    ],
+    "bed_temperature": [
+        "50"
+    ],
+    "bed_temperature_initial_layer": [
+        "60"
+    ],
+    "fan_cooling_layer_time": [
+        "4"
+    ],
+    "slow_down_layer_time": [
+        "4"
+    ],
+    "fan_min_speed": [
+        "100"
+    ],
+    "fan_max_speed": [
+        "100"
+    ],
+    "filament_flow_ratio": "0.98",
+    "filament_retraction_length": [
+        "1.0"
+    ],
+    "filament_retraction_speed": [
+        "35"
+    ],
+    "filament_retract_restart_extra": [
+        "0"
+    ],
+    "filament_z_hop": [
+        "0.4"
+    ],
+    "filament_wipe": [
+        "1"
+    ],
+    "compatible_printers": [
+        "Dremel 3D45 0.4 nozzle"
+    ],
+    "version": "1.6.0.0"
+}
