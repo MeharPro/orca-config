@@ -13,6 +13,15 @@ What it does:
 - If there’s a new tag, updates files under `releases/`
 - Downloads the **Windows Portable** asset, overlays your files from `configs/portable-overlay/root/`, rezips, and uploads it to this repo’s **GitHub Release** with the same tag
 
+## Daily Sync (Vercel Cron Backup)
+
+This repo also includes a Vercel Cron endpoint that can trigger the GitHub Actions workflow automatically:
+- `api/cron/sync.js`
+- `vercel.json`
+
+To enable it, set Vercel env var `GITHUB_PAT` (a GitHub PAT that can dispatch workflows on `MeharPro/orca-config`).
+Optionally set `CRON_SECRET` and update the Vercel Cron path to include `?secret=...`.
+
 ## Custom Presets
 
 Put your exported presets here:
