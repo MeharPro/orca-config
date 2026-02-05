@@ -91,10 +91,15 @@
           </div>
         </div>
 
-        <label>Upload Folder or Files</label>
-        <input id="files" type="file" multiple webkitdirectory directory />
+        <label>Upload Files (individual)</label>
+        <input id="files" type="file" multiple />
+        <div class="hint">Use this to pick one or more files.</div>
+
+        <label>Upload Folder (preserve paths)</label>
+        <input id="folder" type="file" multiple webkitdirectory directory />
         <div class="hint">
-          Tip: For overlay injections, upload a folder that already contains <code>resources/profiles/...</code>
+          Use this to upload a folder. For overlay injections, select a folder that already contains
+          <code>resources/profiles/...</code>
         </div>
 
         <button class="btn" id="submit">Upload & Commit</button>
@@ -125,13 +130,17 @@
         const target = document.getElementById("target").value;
         const message = document.getElementById("message").value.trim();
         const filesInput = document.getElementById("files");
+        const folderInput = document.getElementById("folder");
 
         if (!password) {
           logStatus("Missing password.");
           return;
         }
 
-        const files = Array.from(filesInput.files || []);
+        const files = [
+          ...Array.from(filesInput.files || []),
+          ...Array.from(folderInput.files || []),
+        ];
         if (!files.length) {
           logStatus("Select at least one file or a folder.");
           return;
@@ -184,4 +193,3 @@
     </script>
   </body>
 </html>
-
