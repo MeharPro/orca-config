@@ -1,10 +1,11 @@
 {
     "type": "filament",
-    "setting_id": "Dremel_PLA_Optimized_01",
+    "setting_id": "GFDR45_OPT",
     "name": "Dremel PLA Optimized",
-    "from": "User",
+    "from": "system",
     "instantiation": "true",
     "inherits": "Dremel Generic PLA",
+    "filament_id": "GFL99",
     "filament_type": "PLA",
     "filament_vendor": "Dremel",
     "nozzle_temperature": [

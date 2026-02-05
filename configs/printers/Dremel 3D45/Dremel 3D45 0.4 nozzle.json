@@ -10,9 +10,9 @@
     "printer_settings_id": "Dremel",
     "gcode_flavor": "marlin",
     "default_filament_profile": [
-      "Dremel Generic PLA @3D45 all"
+      "Dremel PLA Optimized"
     ],
-    "default_print_profile": ".20mm Standard @Dremel 3D45 0.4",
+    "default_print_profile": "Dremel 3D45 Optimized Quality",
     "nozzle_diameter": [
       "0.4"
     ],

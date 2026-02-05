@@ -1,8 +1,8 @@
 {
     "type": "process",
-    "setting_id": "Dremel_Process_Optimized_01",
+    "setting_id": "GPDR45_OPT",
     "name": "Dremel 3D45 Optimized Quality",
-    "from": "User",
+    "from": "system",
     "instantiation": "true",
     "inherits": "fdm_process_dremel_common",
     "layer_height": "0.2",
