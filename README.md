@@ -22,6 +22,22 @@ This repo also includes a Vercel Cron endpoint that can trigger the GitHub Actio
 To enable it, set Vercel env var `GITHUB_PAT` (a GitHub PAT that can dispatch workflows on `MeharPro/orca-config`).
 Optionally set `CRON_SECRET` and update the Vercel Cron path to include `?secret=...`.
 
+## Admin Upload (No Local Computer Needed)
+
+You can add/update printer/filament/process configs directly from the web without using your computer:
+
+- Admin UI: `/admin`
+- API: `/api/admin/commit`
+
+Required Vercel env vars:
+- `GITHUB_PAT` (GitHub PAT with repo + workflow permissions on `MeharPro/orca-config`)
+- `ADMIN_PASSWORD` (password for the admin UI/API)
+
+How it works:
+- You upload a folder from the browser (it preserves relative paths).
+- The API commits those files into the correct `configs/` subfolder in GitHub.
+- If you upload to the **overlay** target, the next automation run will bake those files into the portable zip automatically.
+
 ## Custom Presets
 
 Put your exported presets here:

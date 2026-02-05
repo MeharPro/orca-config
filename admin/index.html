@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>orca-config Admin</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b0f16;
+        --card: #131a24;
+        --text: #e6edf3;
+        --muted: #9fb0c3;
+        --accent: #7cf4d2;
+        --border: #233044;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: radial-gradient(900px 600px at 10% 10%, rgba(124,244,210,0.10), transparent 60%), var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 860px;
+        margin: 40px auto;
+        padding: 0 20px 60px;
+      }
+      h1 { font-size: 28px; margin: 0 0 10px; }
+      p { color: var(--muted); line-height: 1.6; }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        margin-top: 18px;
+      }
+      label { display: block; margin: 12px 0 6px; color: var(--muted); }
+      input, select, textarea {
+        width: 100%;
+        background: #0f1520;
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 10px 12px;
+      }
+      input[type="file"] { padding: 10px; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .btn {
+        margin-top: 12px;
+        background: linear-gradient(90deg, rgba(124,244,210,0.18), rgba(154,230,255,0.12));
+        border: 1px solid rgba(124,244,210,0.35);
+        color: var(--text);
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+      .status { margin-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+      .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+      @media (max-width: 720px) {
+        .row { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>orca-config Admin</h1>
+      <p>
+        Upload printer/filament/process files without using your computer locally.
+        Files are committed directly into GitHub and (if in the overlay) baked into every new portable release automatically.
+      </p>
+
+      <div class="card">
+        <label>Password</label>
+        <input id="password" type="password" placeholder="Admin password" />
+
+        <div class="row">
+          <div>
+            <label>Target Area</label>
+            <select id="target">
+              <option value="printers">configs/printers</option>
+              <option value="filaments">configs/filaments</option>
+              <option value="processes">configs/processes</option>
+              <option value="overlay">configs/portable-overlay/root</option>
+            </select>
+          </div>
+          <div>
+            <label>Commit Message (optional)</label>
+            <input id="message" type="text" placeholder="Update configs" />
+          </div>
+        </div>
+
+        <label>Upload Folder or Files</label>
+        <input id="files" type="file" multiple webkitdirectory directory />
+        <div class="hint">
+          Tip: For overlay injections, upload a folder that already contains <code>resources/profiles/...</code>
+        </div>
+
+        <button class="btn" id="submit">Upload & Commit</button>
+
+        <div class="status" id="status"></div>
+      </div>
+    </main>
+
+    <script>
+      const statusEl = document.getElementById("status");
+      const submitBtn = document.getElementById("submit");
+
+      function logStatus(msg) {
+        statusEl.textContent = msg;
+      }
+
+      function toBase64(buf) {
+        const bytes = new Uint8Array(buf);
+        let binary = "";
+        for (let i = 0; i < bytes.byteLength; i++) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+      }
+
+      submitBtn.addEventListener("click", async () => {
+        const password = document.getElementById("password").value.trim();
+        const target = document.getElementById("target").value;
+        const message = document.getElementById("message").value.trim();
+        const filesInput = document.getElementById("files");
+
+        if (!password) {
+          logStatus("Missing password.");
+          return;
+        }
+
+        const files = Array.from(filesInput.files || []);
+        if (!files.length) {
+          logStatus("Select at least one file or a folder.");
+          return;
+        }
+
+        submitBtn.disabled = true;
+        logStatus("Preparing files…");
+
+        try {
+          const payloadFiles = [];
+          for (const f of files) {
+            if (f.name === ".DS_Store") continue;
+            const buf = await f.arrayBuffer();
+            const rel = f.webkitRelativePath || f.name;
+            payloadFiles.push({
+              path: rel,
+              encoding: "base64",
+              content: toBase64(buf),
+            });
+          }
+
+          const body = {
+            target,
+            message,
+            files: payloadFiles,
+          };
+
+          logStatus("Uploading…");
+          const res = await fetch("/api/admin/commit", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-password": password,
+            },
+            body: JSON.stringify(body),
+          });
+
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || `HTTP ${res.status}`);
+          }
+
+          logStatus(`Committed: ${data.commit || "ok"}`);
+        } catch (err) {
+          logStatus(`Error: ${err.message || err}`);
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
+
