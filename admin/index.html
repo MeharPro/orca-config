@@ -55,9 +55,36 @@
         border-radius: 10px;
         cursor: pointer;
       }
+      .btn.secondary {
+        background: #0f1520;
+        border-color: var(--border);
+      }
+      .btn.small {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
       .btn:disabled { opacity: 0.6; cursor: not-allowed; }
       .status { margin-top: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
       .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+      .section-title { margin: 0 0 8px; font-size: 18px; }
+      .list {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+      }
+      .list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 8px;
+        background: #0f1520;
+        font-size: 13px;
+      }
+      .list-item span { word-break: break-word; }
       @media (max-width: 720px) {
         .row { grid-template-columns: 1fr; }
       }
@@ -106,11 +133,33 @@
 
         <div class="status" id="status"></div>
       </div>
+
+      <div class="card">
+        <h2 class="section-title">Manage Profiles</h2>
+        <p class="hint">
+          Use the upload card above to add files. Use the lists below to remove profiles from the repo.
+        </p>
+        <button class="btn secondary" id="refresh">Refresh Lists</button>
+
+        <div class="row">
+          <div>
+            <label>Printer Profiles</label>
+            <ul class="list" id="printerList"></ul>
+          </div>
+          <div>
+            <label>Filament Profiles</label>
+            <ul class="list" id="filamentList"></ul>
+          </div>
+        </div>
+      </div>
     </main>
 
     <script>
       const statusEl = document.getElementById("status");
       const submitBtn = document.getElementById("submit");
+      const refreshBtn = document.getElementById("refresh");
+      const printerList = document.getElementById("printerList");
+      const filamentList = document.getElementById("filamentList");
 
       function logStatus(msg) {
         statusEl.textContent = msg;
@@ -189,6 +238,96 @@
         } finally {
           submitBtn.disabled = false;
         }
+      });
+
+      async function fetchList(target) {
+        const password = document.getElementById("password").value.trim();
+        if (!password) {
+          logStatus("Missing password.");
+          return [];
+        }
+        const res = await fetch(`/api/admin/list?target=${encodeURIComponent(target)}`, {
+          headers: { "x-admin-password": password },
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          throw new Error(data.error || `HTTP ${res.status}`);
+        }
+        return data.profiles || [];
+      }
+
+      function renderList(target, items, container) {
+        container.innerHTML = "";
+        if (!items.length) {
+          const empty = document.createElement("li");
+          empty.className = "list-item";
+          empty.textContent = "No profiles found.";
+          container.appendChild(empty);
+          return;
+        }
+        for (const item of items) {
+          const li = document.createElement("li");
+          li.className = "list-item";
+          const label = document.createElement("span");
+          label.textContent = item;
+          const btn = document.createElement("button");
+          btn.className = "btn small secondary";
+          btn.textContent = "Remove";
+          btn.addEventListener("click", () => removeProfile(target, item));
+          li.appendChild(label);
+          li.appendChild(btn);
+          container.appendChild(li);
+        }
+      }
+
+      async function removeProfile(target, path) {
+        const password = document.getElementById("password").value.trim();
+        if (!password) {
+          logStatus("Missing password.");
+          return;
+        }
+        if (!confirm(`Remove ${path}? This cannot be undone.`)) return;
+
+        try {
+          logStatus("Removing…");
+          const res = await fetch("/api/admin/delete", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-password": password,
+            },
+            body: JSON.stringify({
+              target,
+              paths: [path],
+              message: `Remove ${path}`,
+            }),
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            throw new Error(data.error || `HTTP ${res.status}`);
+          }
+          logStatus(`Removed: ${path}`);
+          await loadLists();
+        } catch (err) {
+          logStatus(`Error: ${err.message || err}`);
+        }
+      }
+
+      async function loadLists() {
+        try {
+          const [printers, filaments] = await Promise.all([
+            fetchList("printers"),
+            fetchList("filaments"),
+          ]);
+          renderList("printers", printers, printerList);
+          renderList("filaments", filaments, filamentList);
+        } catch (err) {
+          logStatus(`Error: ${err.message || err}`);
+        }
+      }
+
+      refreshBtn.addEventListener("click", () => {
+        loadLists();
       });
     </script>
   </body>

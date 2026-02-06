@@ -107,10 +107,6 @@
         {
             "name": "Dremel Generic PLA @3D45 all",
             "sub_path": "filament/Dremel Generic PLA @3D45 all.json"
-        },
-        {
-            "name": "Dremel PLA Optimized",
-            "sub_path": "filament/Dremel_PLA_Optimized.json"
         }
     ],
     "machine_list": [
