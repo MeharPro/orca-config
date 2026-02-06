@@ -26,9 +26,27 @@ jobs:
           persist-credentials: true
 
       - name: Sync latest release
+        id: sync
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: scripts/sync-orcaslicer-release.sh
+        run: |
+          set +e
+          scripts/sync-orcaslicer-release.sh
+          code=$?
+          if [[ $code -eq 0 ]]; then
+            echo "sync_ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "sync_ok=false" >> "$GITHUB_OUTPUT"
+            echo "Sync failed (exit ${code}); using existing release metadata."
+          fi
+          exit 0
+
+      - name: Ensure release metadata exists
+        run: |
+          if [[ ! -f releases/latest_tag.txt || ! -f releases/windows_portable.json ]]; then
+            echo "Missing releases/latest_tag.txt or releases/windows_portable.json" >&2
+            exit 2
+          fi
 
       - name: Detect changes
         id: changes
