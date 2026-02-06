@@ -74,6 +74,10 @@ if [[ -n "${OVERLAY_DIR}" ]]; then
   fi
 fi
 
+# Remove unsupported upstream profiles so the packaged build only exposes
+# the curated printer + filament set.
+bash "${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/scripts/prune-portable-profiles.sh" "${EXTRACT_DIR}"
+
 # Add a small marker so it's obvious this archive was repackaged.
 mkdir -p "${EXTRACT_DIR}/orca-config"
 cat > "${EXTRACT_DIR}/orca-config/README.txt" <<'TXT'
