@@ -10,6 +10,7 @@ on:
     paths:
       - "configs/portable-overlay/**"
       - "scripts/repackage-windows-portable.sh"
+      - "scripts/prune-portable-profiles.sh"
       - "scripts/sync-orcaslicer-release.sh"
       - ".github/workflows/sync-orcaslicer-release.yml"
 
