@@ -27,6 +27,23 @@ rewrite_json() {
   mv "${tmp}" "${file}"
 }
 
+resolve_referenced_asset() {
+  local vendor_dir="$1"
+  local ref="$2"
+  local exact="${vendor_dir}/${ref}"
+  local found
+
+  if [[ -f "${exact}" ]]; then
+    echo "${ref}"
+    return 0
+  fi
+
+  found="$(find "${vendor_dir}" -type f -iname "$(basename "${ref}")" -print -quit)"
+  if [[ -n "${found}" ]]; then
+    echo "${found#${vendor_dir}/}"
+  fi
+}
+
 # Keep only vendor bundles that will be exposed in the repackaged distribution.
 for path in "${PROFILES_DIR}"/*; do
   base="$(basename "${path}")"
@@ -132,14 +149,21 @@ collect_keep_paths() {
   ' "${vendor_json}" >>"${out_file}"
 
   while IFS= read -r model_sub_path; do
+    local model_file
+    local resolved
     model_file="${vendor_dir}/${model_sub_path}"
     if [[ -f "${model_file}" ]]; then
-      jq -r '.bed_model, .bed_texture, .hotend_model | select(type == "string" and length > 0)' "${model_file}" >>"${out_file}"
+      while IFS= read -r ref; do
+        resolved="$(resolve_referenced_asset "${vendor_dir}" "${ref}" || true)"
+        if [[ -n "${resolved}" ]]; then
+          echo "${resolved}" >>"${out_file}"
+        fi
+      done < <(jq -r '.bed_model, .bed_texture, .hotend_model | select(type == "string" and length > 0)' "${model_file}")
     fi
   done < <(jq -r '.machine_model_list[]?.sub_path // empty' "${vendor_json}")
 
-  # Keep cover images for listed machine models for UI thumbnails.
-  find "${vendor_dir}" -maxdepth 1 -type f -name '*_cover.png' -exec basename {} \; >>"${out_file}"
+  # Keep vendor-level assets (STL/PNG/textures) used by machine models.
+  find "${vendor_dir}" -maxdepth 1 -type f ! -name '*.json' -exec basename {} \; >>"${out_file}"
   sort -u "${out_file}" -o "${out_file}"
 }
 
