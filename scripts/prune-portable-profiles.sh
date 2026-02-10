@@ -27,40 +27,20 @@ rewrite_json() {
   mv "${tmp}" "${file}"
 }
 
-resolve_referenced_asset() {
-  local vendor_dir="$1"
-  local ref="$2"
-  local exact="${vendor_dir}/${ref}"
-  local found
-
-  if [[ -f "${exact}" ]]; then
-    echo "${ref}"
-    return 0
-  fi
-
-  found="$(find "${vendor_dir}" -type f -iname "$(basename "${ref}")" -print -quit)"
-  if [[ -n "${found}" ]]; then
-    echo "${found#${vendor_dir}/}"
-  fi
-}
-
-# Keep only vendor bundles that will be exposed in the repackaged distribution.
-for path in "${PROFILES_DIR}"/*; do
-  base="$(basename "${path}")"
-  case "${base}" in
-    Dremel|Dremel.json|Flashforge|Flashforge.json|Custom.json|OrcaFilamentLibrary.json|blacklist.json)
-      ;;
-    *)
-      rm -rf "${path}"
-      ;;
-  esac
-done
-
 DREMEL_JSON="${PROFILES_DIR}/Dremel.json"
 FLASHFORGE_JSON="${PROFILES_DIR}/Flashforge.json"
 CUSTOM_JSON="${PROFILES_DIR}/Custom.json"
 ORCA_FILAMENT_LIBRARY_JSON="${PROFILES_DIR}/OrcaFilamentLibrary.json"
 
+for required in "${DREMEL_JSON}" "${FLASHFORGE_JSON}" "${CUSTOM_JSON}" "${ORCA_FILAMENT_LIBRARY_JSON}"; do
+  if [[ ! -f "${required}" ]]; then
+    echo "Required profile bundle missing: ${required}" >&2
+    exit 2
+  fi
+done
+
+# Keep all upstream files on disk for runtime safety. Only rewrite manifests so
+# OrcaSlicer exposes the curated profile set in the UI.
 rewrite_json "${DREMEL_JSON}" '
   .machine_model_list |= map(select(.name == "Dremel 3D45")) |
   .machine_list |= map(select(
@@ -111,7 +91,6 @@ rewrite_json "${FLASHFORGE_JSON}" '
   ))
 '
 
-# Keep expected core bundle files present while exposing no extra profiles.
 rewrite_json "${CUSTOM_JSON}" '
   .machine_model_list = [] |
   .machine_list = [] |
@@ -123,7 +102,7 @@ rewrite_json "${ORCA_FILAMENT_LIBRARY_JSON}" '
   .filament_list = []
 '
 
-# Align defaults with the kept filament list.
+# Align defaults with the curated filament choices.
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45.json" '
   .default_materials = "Dremel Generic PLA @3D45 all"
 '
@@ -147,60 +126,19 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
   .default_filament_profile = ["Flashforge Generic PLA"]
 '
 
-collect_keep_paths() {
-  local vendor_json="$1"
-  local vendor_dir="$2"
-  local out_file="$3"
+# Hide all other vendors without deleting any files that Orca may rely on.
+for root in "${PROFILES_DIR}"/*.json; do
+  base="$(basename "${root}")"
+  case "${base}" in
+    Dremel.json|Flashforge.json|Custom.json|OrcaFilamentLibrary.json|blacklist.json)
+      continue
+      ;;
+  esac
 
-  : >"${out_file}"
-  jq -r '
-    [
-      (.machine_model_list[]?.sub_path // empty),
-      (.machine_list[]?.sub_path // empty),
-      (.process_list[]?.sub_path // empty),
-      (.filament_list[]?.sub_path // empty)
-    ] | .[]
-  ' "${vendor_json}" >>"${out_file}"
-
-  while IFS= read -r model_sub_path; do
-    local model_file
-    local resolved
-    model_file="${vendor_dir}/${model_sub_path}"
-    if [[ -f "${model_file}" ]]; then
-      while IFS= read -r ref; do
-        resolved="$(resolve_referenced_asset "${vendor_dir}" "${ref}" || true)"
-        if [[ -n "${resolved}" ]]; then
-          echo "${resolved}" >>"${out_file}"
-        fi
-      done < <(jq -r '.bed_model, .bed_texture, .hotend_model | select(type == "string" and length > 0)' "${model_file}")
-    fi
-  done < <(jq -r '.machine_model_list[]?.sub_path // empty' "${vendor_json}")
-
-  # Keep vendor-level assets (STL/PNG/textures) used by machine models.
-  find "${vendor_dir}" -maxdepth 1 -type f ! -name '*.json' -exec basename {} \; >>"${out_file}"
-  sort -u "${out_file}" -o "${out_file}"
-}
-
-prune_vendor_files() {
-  local vendor_dir="$1"
-  local keep_file="$2"
-  local rel
-
-  while IFS= read -r file; do
-    rel="${file#${vendor_dir}/}"
-    if ! grep -Fxq "${rel}" "${keep_file}"; then
-      rm -f "${file}"
-    fi
-  done < <(find "${vendor_dir}" -type f)
-
-  find "${vendor_dir}" -type d -empty -delete
-}
-
-dremel_keep="$(mktemp)"
-flashforge_keep="$(mktemp)"
-trap 'rm -f "${dremel_keep}" "${flashforge_keep}"' EXIT
-
-collect_keep_paths "${DREMEL_JSON}" "${PROFILES_DIR}/Dremel" "${dremel_keep}"
-collect_keep_paths "${FLASHFORGE_JSON}" "${PROFILES_DIR}/Flashforge" "${flashforge_keep}"
-prune_vendor_files "${PROFILES_DIR}/Dremel" "${dremel_keep}"
-prune_vendor_files "${PROFILES_DIR}/Flashforge" "${flashforge_keep}"
+  rewrite_json "${root}" '
+    if has("machine_model_list") then .machine_model_list = [] else . end |
+    if has("machine_list") then .machine_list = [] else . end |
+    if has("process_list") then .process_list = [] else . end |
+    if has("filament_list") then .filament_list = [] else . end
+  '
+done
