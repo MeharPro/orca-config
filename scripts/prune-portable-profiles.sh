@@ -48,7 +48,7 @@ resolve_referenced_asset() {
 for path in "${PROFILES_DIR}"/*; do
   base="$(basename "${path}")"
   case "${base}" in
-    Dremel|Dremel.json|Flashforge|Flashforge.json|blacklist.json)
+    Dremel|Dremel.json|Flashforge|Flashforge.json|Custom.json|OrcaFilamentLibrary.json|blacklist.json)
       ;;
     *)
       rm -rf "${path}"
@@ -58,6 +58,8 @@ done
 
 DREMEL_JSON="${PROFILES_DIR}/Dremel.json"
 FLASHFORGE_JSON="${PROFILES_DIR}/Flashforge.json"
+CUSTOM_JSON="${PROFILES_DIR}/Custom.json"
+ORCA_FILAMENT_LIBRARY_JSON="${PROFILES_DIR}/OrcaFilamentLibrary.json"
 
 rewrite_json "${DREMEL_JSON}" '
   .machine_model_list |= map(select(.name == "Dremel 3D45")) |
@@ -107,6 +109,18 @@ rewrite_json "${FLASHFORGE_JSON}" '
     .name == "Flashforge PLA @FF AD5M 0.25 Nozzle" or
     .name == "Flashforge ABS @FF AD5M 0.25 Nozzle"
   ))
+'
+
+# Keep expected core bundle files present while exposing no extra profiles.
+rewrite_json "${CUSTOM_JSON}" '
+  .machine_model_list = [] |
+  .machine_list = [] |
+  .process_list = [] |
+  .filament_list = []
+'
+
+rewrite_json "${ORCA_FILAMENT_LIBRARY_JSON}" '
+  .filament_list = []
 '
 
 # Align defaults with the kept filament list.
