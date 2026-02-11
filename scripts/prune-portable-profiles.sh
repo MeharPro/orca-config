@@ -67,7 +67,6 @@ rewrite_json "${FLASHFORGE_JSON}" '
     .name == "fdm_machine_common" or
     .name == "fdm_flashforge_common" or
     .name == "fdm_adventurer5m_common" or
-    .name == "Flashforge Adventurer 5M Pro 0.25 Nozzle" or
     .name == "Flashforge Adventurer 5M Pro 0.4 Nozzle" or
     .name == "Flashforge Adventurer 5M Pro 0.6 Nozzle" or
     .name == "Flashforge Adventurer 5M Pro 0.8 Nozzle"
@@ -78,16 +77,16 @@ rewrite_json "${FLASHFORGE_JSON}" '
     .name == "fdm_process_flashforge_0.20" or
     .name == "fdm_process_flashforge_0.30" or
     .name == "fdm_process_flashforge_0.40" or
-    (.name | test("AD5M Pro"))
+    .name == "0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle" or
+    .name == "0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle" or
+    .name == "0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle"
   )) |
   .filament_list |= map(select(
     .name == "fdm_filament_common" or
     .name == "fdm_filament_abs" or
     .name == "fdm_filament_pla" or
     .name == "Flashforge Generic PLA" or
-    .name == "Flashforge Generic ABS" or
-    .name == "Flashforge PLA @FF AD5M 0.25 Nozzle" or
-    .name == "Flashforge ABS @FF AD5M 0.25 Nozzle"
+    .name == "Flashforge Generic ABS"
   ))
 '
 
@@ -111,10 +110,7 @@ rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45 0.4 nozzle.json" '
   .default_print_profile = "Dremel 3D45 Optimized Quality"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.json" '
-  .default_materials = "Flashforge Generic PLA;Flashforge Generic ABS;Flashforge PLA @FF AD5M 0.25 Nozzle"
-'
-rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.25 Nozzle.json" '
-  .default_filament_profile = ["Flashforge PLA @FF AD5M 0.25 Nozzle"]
+  .default_materials = "Flashforge Generic PLA;Flashforge Generic ABS"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.4 Nozzle.json" '
   .default_filament_profile = ["Flashforge Generic PLA"]
@@ -125,6 +121,17 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.8 Nozzle.json" '
   .default_filament_profile = ["Flashforge Generic PLA"]
 '
+
+# Make Flashforge Generic PLA/ABS selectable on the Dremel profile as requested.
+for filament in \
+  "${PROFILES_DIR}/Flashforge/filament/Flashforge Generic PLA.json" \
+  "${PROFILES_DIR}/Flashforge/filament/Flashforge Generic ABS.json"; do
+  if [[ -f "${filament}" ]]; then
+    rewrite_json "${filament}" '
+      .compatible_printers = ((.compatible_printers // []) + ["Dremel 3D45 0.4 nozzle"] | unique)
+    '
+  fi
+done
 
 # Hide all other vendors without deleting any files that Orca may rely on.
 for root in "${PROFILES_DIR}"/*.json; do
