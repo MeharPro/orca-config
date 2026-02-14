@@ -1,52 +1,50 @@
 # OrcaSlicer Latest Release
 
-- Tag: v2.3.1
-- Name: OrcaSlicer v2.3.1 Official Release
-- Published: 2025-10-05T05:59:05Z
-- URL: https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.1
+- Tag: v2.3.0
+- Name: OrcaSlicer V2.3.0 Official Release
+- Published: 2025-03-20T14:44:33Z
+- URL: https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.0
 
 ## Notes
 
-This is the official release of OrcaSlicer 2.3.1.
+This is the official release of Orca Slicer v2.3.0, a stable version that we highly recommend for all users.
 
-We have fixed some bugs and made several improvements.
+**Note**: If you upgrade from OrcaSlicer 2.2 or an older version, there’s a chance that some of your previously custom filaments are now available to all your printers. However, if this isn’t what you want, you can set the filament’s dependency to restrict it to a specific printer. For custom filament settings created with 2.3, it will automatically set to be compatible with the current printer model only. In the following video, I demonstrate how to change my “Aliz PETG @Voron” filament, which is optimized for my Voron machine and won’t work with my other printers. I set its dependency to make it visible only to my Voron machine.
 
-**NOTE** I want to give a shout-out to Ian Bassi (@ianalexis). OrcaSlicer’s [WIKI](https://github.com/SoftFever/OrcaSlicer/wiki) is now AWESOME thanks to his fantastic work.
+https://github.com/user-attachments/assets/cf51f39d-c471-4848-bf24-797abbbb8cdf
 
 ## What's Changed
-### Bug fixes:
-* fix a regression bug that wrong printer model for Prusa MK3S and MINI in 2.3.1 beta by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10821
-* Enhance GCode handling for Z-axis movements by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10803
-* Fix a crash issue when importing a 3MF file saved from version 2.3.1-alpha as geometry only by @SoftFever 
-* Disable smooth sprial in input_shaping calibrations by @ianalexis in https://github.com/SoftFever/OrcaSlicer/pull/10748
+* Backup User Profiles:When OrcaSlicer upgrades to a new version by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/8953
 
-### Profiles and documents and miscellaneous:
-* Add support for OrcaSlicer 2.3.1-alpha infill rotation template warning by @SoftFever 
-* Reflect swapped mouse buttons in Help → Keyboard Shortcuts by @kisslorand in https://github.com/SoftFever/OrcaSlicer/pull/10647
-* [Profile]parameters modified in printer file by @InnovatiQ-Additive in https://github.com/SoftFever/OrcaSlicer/pull/10394
-* Fix variable name comment and message by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10302
-* Fixes 50 Compiler Warnings: Add SYSTEM toCMakeLists.txt by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10653
-* Fixes 999 CMake Warnings by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10729
-* Update TURKISH translations (V2.3.1-beta) by @GlauTechCo in https://github.com/SoftFever/OrcaSlicer/pull/10726
-* Update Anycubic Kobra 2 Neo machine profile fine tune end gcode by @frawg in https://github.com/SoftFever/OrcaSlicer/pull/10742
-* Shellcheck everything by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10730
-* Add a once-daily Build All which skips caches by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10731
-* Add Afinia 3d printer and update tree_support_tip_diameter option for Tiertime printers by @GuoGeTiertime in https://github.com/SoftFever/OrcaSlicer/pull/10705
-* [PROFILE]Add Sovol SV01 by @M4ketech in https://github.com/SoftFever/OrcaSlicer/pull/10723
-* [QOL] Remember slider position for single layer mode in preview by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10758
-* Improve the pt-BR translation by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/10837
-* Fix grid lines origin for multiple plates by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10724
-* Update Q2 print height by @HYzd766 in https://github.com/SoftFever/OrcaSlicer/pull/10843
-* Add Sovol SV08 MAX profiles from Sovol's repo by @arachnist in https://github.com/SoftFever/OrcaSlicer/pull/10768
-* Revamp OrcaSlicer updater by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10884
-* Update DMG creation process in build workflow by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10891
-* Update OrcaSlicer_tr.po by @whizosk in https://github.com/SoftFever/OrcaSlicer/pull/10856
-* Add a new printer Model with Flyingbear by @FlyingbearOfficial in https://github.com/SoftFever/OrcaSlicer/pull/10889
-* [PROFILE]add Rolohaun Delta Flyer Refit by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10893
-* [PROFILE] fix for Ender 3 V3 KE by @maoravni in https://github.com/SoftFever/OrcaSlicer/pull/10860
-* update de for 2.3.1 after update locale by @hliebscher in https://github.com/SoftFever/OrcaSlicer/pull/10912
-* [Profiles] Fix bed_exclude_area excluding the whole bed on Anycubic Kobra 3 by @ErikGS in https://github.com/SoftFever/OrcaSlicer/pull/10914
+https://github.com/user-attachments/assets/6cc86849-cf20-4f30-a9d4-a8b671516ebf
 
+* Allow generating brims for objects inside other object's hole by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8914
+![image](https://github.com/user-attachments/assets/5cc531dd-e8eb-49e3-bb16-d491e8654541)
+
+* Fix a bug that, in some instances, caused sending large print jobs to the Bambu machine to be slow by @3vi1 in https://github.com/SoftFever/OrcaSlicer/pull/8925
+* Fix crash when resetting filament presets by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8911
+* Use .gcode.3mf as ext for gcode 3mf files by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/8928
+* Fix wrong first layer temperature when ooze prevention and print-by-obj are enabled by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8927
+
+* Fix crash when support bottom interface layer is set to `same as top`  by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8955
+* Set Crosshatch as default infill pattern instead of grid by @bistory in https://github.com/SoftFever/OrcaSlicer/pull/8952
+
+* fix de after update locale by @hliebscher in https://github.com/SoftFever/OrcaSlicer/pull/8803
+* Fix Creality Hi extruder_clearance_height_to_lid by @bistory in https://github.com/SoftFever/OrcaSlicer/pull/8806
+* Improve the pt-BR translation of "plate" by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/8828
+* Add pause gcode command to Sovol SV08 & SV07 by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8840
+* Show Creality CR-6 Optimal processes by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8848
+* Update TURKISH translations (2.3.0-rc) by @GlauTechCo in https://github.com/SoftFever/OrcaSlicer/pull/8851
+* Adding more pt-BR translations by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/8871
+* Fix typo by @wrathernaut in https://github.com/SoftFever/OrcaSlicer/pull/8872
+* Change Elegoo Centauri Start GCode to Wait for bed temp by @thelegendtubaguy in https://github.com/SoftFever/OrcaSlicer/pull/8882
+* Traditional Chinese Localization Update in 2.3.0-rc by @shuwn in https://github.com/SoftFever/OrcaSlicer/pull/8883
+* Added TPU, ABS, and PETG Profiles for Co Print ChromaSet-2 by @coprint in https://github.com/SoftFever/OrcaSlicer/pull/8888
+* Update Catalan language for OrcaSlicer V2.3.0 Release Candidate by @davidjuanesb in https://github.com/SoftFever/OrcaSlicer/pull/8913
+* bugfix and updates in profiles for MK3.5 by @koppensb in https://github.com/SoftFever/OrcaSlicer/pull/8778
+* Add Lulzbot Taz 4, 5, Pro Dual, Pro S by @wrathernaut in https://github.com/SoftFever/OrcaSlicer/pull/8844
+* Fixes/Improvements for Creality profiles by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8850
+* Output x64 registers to windows crash report too by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8951
 
 -----------------------------
 ## Support

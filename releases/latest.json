@@ -1,70 +1,86 @@
 {
-  "id": 250480929,
-  "tag_name": "v2.3.1",
-  "name": "OrcaSlicer v2.3.1 Official Release",
+  "id": 206259209,
+  "tag_name": "v2.3.0",
+  "name": "OrcaSlicer V2.3.0 Official Release",
   "draft": false,
   "prerelease": false,
-  "published_at": "2025-10-05T05:59:05Z",
-  "html_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.1",
-  "tarball_url": "https://api.github.com/repos/OrcaSlicer/OrcaSlicer/tarball/v2.3.1",
-  "zipball_url": "https://api.github.com/repos/OrcaSlicer/OrcaSlicer/zipball/v2.3.1",
-  "body": "This is the official release of OrcaSlicer 2.3.1.\r\n\r\nWe have fixed some bugs and made several improvements.\r\n\r\n**NOTE** I want to give a shout-out to Ian Bassi (@ianalexis). OrcaSlicer\u2019s [WIKI](https://github.com/SoftFever/OrcaSlicer/wiki) is now AWESOME thanks to his fantastic work.\r\n\r\n## What's Changed\r\n### Bug fixes:\r\n* fix a regression bug that wrong printer model for Prusa MK3S and MINI in 2.3.1 beta by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10821\r\n* Enhance GCode handling for Z-axis movements by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10803\r\n* Fix a crash issue when importing a 3MF file saved from version 2.3.1-alpha as geometry only by @SoftFever \r\n* Disable smooth sprial in input_shaping calibrations by @ianalexis in https://github.com/SoftFever/OrcaSlicer/pull/10748\r\n\r\n### Profiles and documents and miscellaneous:\r\n* Add support for OrcaSlicer 2.3.1-alpha infill rotation template warning by @SoftFever \r\n* Reflect swapped mouse buttons in Help \u2192 Keyboard Shortcuts by @kisslorand in https://github.com/SoftFever/OrcaSlicer/pull/10647\r\n* [Profile]parameters modified in printer file by @InnovatiQ-Additive in https://github.com/SoftFever/OrcaSlicer/pull/10394\r\n* Fix variable name comment and message by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10302\r\n* Fixes 50 Compiler Warnings: Add SYSTEM toCMakeLists.txt by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10653\r\n* Fixes 999 CMake Warnings by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10729\r\n* Update TURKISH translations (V2.3.1-beta) by @GlauTechCo in https://github.com/SoftFever/OrcaSlicer/pull/10726\r\n* Update Anycubic Kobra 2 Neo machine profile fine tune end gcode by @frawg in https://github.com/SoftFever/OrcaSlicer/pull/10742\r\n* Shellcheck everything by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10730\r\n* Add a once-daily Build All which skips caches by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10731\r\n* Add Afinia 3d printer and update tree_support_tip_diameter option for Tiertime printers by @GuoGeTiertime in https://github.com/SoftFever/OrcaSlicer/pull/10705\r\n* [PROFILE]Add Sovol SV01 by @M4ketech in https://github.com/SoftFever/OrcaSlicer/pull/10723\r\n* [QOL] Remember slider position for single layer mode in preview by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10758\r\n* Improve the pt-BR translation by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/10837\r\n* Fix grid lines origin for multiple plates by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10724\r\n* Update Q2 print height by @HYzd766 in https://github.com/SoftFever/OrcaSlicer/pull/10843\r\n* Add Sovol SV08 MAX profiles from Sovol's repo by @arachnist in https://github.com/SoftFever/OrcaSlicer/pull/10768\r\n* Revamp OrcaSlicer updater by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10884\r\n* Update DMG creation process in build workflow by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10891\r\n* Update OrcaSlicer_tr.po by @whizosk in https://github.com/SoftFever/OrcaSlicer/pull/10856\r\n* Add a new printer Model with Flyingbear by @FlyingbearOfficial in https://github.com/SoftFever/OrcaSlicer/pull/10889\r\n* [PROFILE]add Rolohaun Delta Flyer Refit by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10893\r\n* [PROFILE] fix for Ender 3 V3 KE by @maoravni in https://github.com/SoftFever/OrcaSlicer/pull/10860\r\n* update de for 2.3.1 after update locale by @hliebscher in https://github.com/SoftFever/OrcaSlicer/pull/10912\r\n* [Profiles] Fix bed_exclude_area excluding the whole bed on Anycubic Kobra 3 by @ErikGS in https://github.com/SoftFever/OrcaSlicer/pull/10914\r\n\r\n\r\n-----------------------------\r\n## Support\r\nI have been spending almost all my spare time maintaining this open source project.\r\nIf you appreciate my work, please consider buying me a coffee.\r\nYour support is greatly appreciated! :)\r\n\r\n[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G5IP3CP)\r\nOr \r\n[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/softfever3d)",
+  "published_at": "2025-03-20T14:44:33Z",
+  "html_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.0",
+  "tarball_url": "https://api.github.com/repos/OrcaSlicer/OrcaSlicer/tarball/v2.3.0",
+  "zipball_url": "https://api.github.com/repos/OrcaSlicer/OrcaSlicer/zipball/v2.3.0",
+  "body": "This is the official release of Orca Slicer v2.3.0, a stable version that we highly recommend for all users.\r\n\r\n**Note**: If you upgrade from OrcaSlicer 2.2 or an older version, there\u2019s a chance that some of your previously custom filaments are now available to all your printers. However, if this isn\u2019t what you want, you can set the filament\u2019s dependency to restrict it to a specific printer. For custom filament settings created with 2.3, it will automatically set to be compatible with the current printer model only. In the following video, I demonstrate how to change my \u201cAliz PETG @Voron\u201d filament, which is optimized for my Voron machine and won\u2019t work with my other printers. I set its dependency to make it visible only to my Voron machine.\r\n\r\nhttps://github.com/user-attachments/assets/cf51f39d-c471-4848-bf24-797abbbb8cdf\r\n\r\n## What's Changed\r\n* Backup User Profiles:When OrcaSlicer upgrades to a new version by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/8953\r\n\r\nhttps://github.com/user-attachments/assets/6cc86849-cf20-4f30-a9d4-a8b671516ebf\r\n\r\n* Allow generating brims for objects inside other object's hole by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8914\r\n![image](https://github.com/user-attachments/assets/5cc531dd-e8eb-49e3-bb16-d491e8654541)\r\n\r\n* Fix a bug that, in some instances, caused sending large print jobs to the Bambu machine to be slow by @3vi1 in https://github.com/SoftFever/OrcaSlicer/pull/8925\r\n* Fix crash when resetting filament presets by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8911\r\n* Use .gcode.3mf as ext for gcode 3mf files by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/8928\r\n* Fix wrong first layer temperature when ooze prevention and print-by-obj are enabled by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8927\r\n\r\n* Fix crash when support bottom interface layer is set to `same as top`  by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8955\r\n* Set Crosshatch as default infill pattern instead of grid by @bistory in https://github.com/SoftFever/OrcaSlicer/pull/8952\r\n\r\n* fix de after update locale by @hliebscher in https://github.com/SoftFever/OrcaSlicer/pull/8803\r\n* Fix Creality Hi extruder_clearance_height_to_lid by @bistory in https://github.com/SoftFever/OrcaSlicer/pull/8806\r\n* Improve the pt-BR translation of \"plate\" by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/8828\r\n* Add pause gcode command to Sovol SV08 & SV07 by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8840\r\n* Show Creality CR-6 Optimal processes by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8848\r\n* Update TURKISH translations (2.3.0-rc) by @GlauTechCo in https://github.com/SoftFever/OrcaSlicer/pull/8851\r\n* Adding more pt-BR translations by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/8871\r\n* Fix typo by @wrathernaut in https://github.com/SoftFever/OrcaSlicer/pull/8872\r\n* Change Elegoo Centauri Start GCode to Wait for bed temp by @thelegendtubaguy in https://github.com/SoftFever/OrcaSlicer/pull/8882\r\n* Traditional Chinese Localization Update in 2.3.0-rc by @shuwn in https://github.com/SoftFever/OrcaSlicer/pull/8883\r\n* Added TPU, ABS, and PETG Profiles for Co Print ChromaSet-2 by @coprint in https://github.com/SoftFever/OrcaSlicer/pull/8888\r\n* Update Catalan language for OrcaSlicer V2.3.0 Release Candidate by @davidjuanesb in https://github.com/SoftFever/OrcaSlicer/pull/8913\r\n* bugfix and updates in profiles for MK3.5 by @koppensb in https://github.com/SoftFever/OrcaSlicer/pull/8778\r\n* Add Lulzbot Taz 4, 5, Pro Dual, Pro S by @wrathernaut in https://github.com/SoftFever/OrcaSlicer/pull/8844\r\n* Fixes/Improvements for Creality profiles by @cochcoder in https://github.com/SoftFever/OrcaSlicer/pull/8850\r\n* Output x64 registers to windows crash report too by @Noisyfox in https://github.com/SoftFever/OrcaSlicer/pull/8951\r\n\r\n-----------------------------\r\n## Support\r\nI have been spending almost all my spare time maintaining this open source project.\r\nIf you appreciate my work, please consider buying me a coffee.\r\nYour support is greatly appreciated! :)\r\n\r\n[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G5IP3CP)\r\nOr \r\n[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/softfever3d)",
   "assets": [
     {
-      "id": 310857117,
-      "name": "Debug_PDB_V2.3.1_for_developers_only.7z",
-      "size": 92227228,
-      "content_type": "application/x-compressed",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/Debug_PDB_V2.3.1_for_developers_only.7z",
-      "updated_at": "2025-10-31T08:00:33Z"
+      "id": 239252810,
+      "name": "Debug_PDB_V2.3.0_for_developers_only.7z",
+      "size": 92547972,
+      "content_type": "application/x-7z-compressed",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/Debug_PDB_V2.3.0_for_developers_only.7z",
+      "updated_at": "2025-03-20T13:19:10Z"
     },
     {
-      "id": 300639213,
-      "name": "OrcaSlicer-Linux-flatpak_V2.3.1_aarch64.flatpak",
-      "size": 126883096,
-      "content_type": "application/vnd.flatpak",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer-Linux-flatpak_V2.3.1_aarch64.flatpak",
-      "updated_at": "2025-10-05T02:37:07Z"
-    },
-    {
-      "id": 300639261,
-      "name": "OrcaSlicer-Linux-flatpak_V2.3.1_x86_64.flatpak",
-      "size": 131475128,
-      "content_type": "application/vnd.flatpak",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer-Linux-flatpak_V2.3.1_x86_64.flatpak",
-      "updated_at": "2025-10-05T02:37:18Z"
-    },
-    {
-      "id": 300639142,
-      "name": "OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.1.AppImage",
-      "size": 114403832,
+      "id": 239252781,
+      "name": "OrcaSlicer-Linux-flatpak_V2.3.0_aarch64.flatpak",
+      "size": 117456464,
       "content_type": "application/octet-stream",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.1.AppImage",
-      "updated_at": "2025-10-05T02:36:56Z"
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer-Linux-flatpak_V2.3.0_aarch64.flatpak",
+      "updated_at": "2025-03-20T13:19:10Z"
     },
     {
-      "id": 300638970,
-      "name": "OrcaSlicer_Mac_universal_V2.3.1.dmg",
-      "size": 202438959,
-      "content_type": "application/x-apple-diskimage",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Mac_universal_V2.3.1.dmg",
-      "updated_at": "2025-10-05T02:36:26Z"
+      "id": 239253015,
+      "name": "OrcaSlicer-Linux-flatpak_V2.3.0_x86_64.flatpak",
+      "size": 121824608,
+      "content_type": "application/octet-stream",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer-Linux-flatpak_V2.3.0_x86_64.flatpak",
+      "updated_at": "2025-03-20T13:19:39Z"
     },
     {
-      "id": 300638900,
-      "name": "OrcaSlicer_Windows_Installer_V2.3.1.exe",
-      "size": 98442605,
-      "content_type": "application/x-msdownload",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Windows_Installer_V2.3.1.exe",
-      "updated_at": "2025-10-05T02:36:04Z"
+      "id": 239252799,
+      "name": "OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.0.AppImage",
+      "size": 113771712,
+      "content_type": "application/octet-stream",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Linux_AppImage_Ubuntu2404_V2.3.0.AppImage",
+      "updated_at": "2025-03-20T13:19:12Z"
     },
     {
-      "id": 300639019,
-      "name": "OrcaSlicer_Windows_V2.3.1_portable.zip",
-      "size": 123887970,
+      "id": 239253027,
+      "name": "OrcaSlicer_Linux_AppImage_V2.3.0.AppImage",
+      "size": 112784576,
+      "content_type": "application/octet-stream",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Linux_AppImage_V2.3.0.AppImage",
+      "updated_at": "2025-03-20T13:19:39Z"
+    },
+    {
+      "id": 239252733,
+      "name": "OrcaSlicer_Mac_arm64_V2.3.0.dmg",
+      "size": 140061290,
+      "content_type": "application/x-diskcopy",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Mac_arm64_V2.3.0.dmg",
+      "updated_at": "2025-03-20T13:18:46Z"
+    },
+    {
+      "id": 239252890,
+      "name": "OrcaSlicer_Mac_x86_64_V2.3.0.dmg",
+      "size": 144338202,
+      "content_type": "application/x-diskcopy",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Mac_x86_64_V2.3.0.dmg",
+      "updated_at": "2025-03-20T13:19:35Z"
+    },
+    {
+      "id": 239252706,
+      "name": "OrcaSlicer_Windows_Installer_V2.3.0.exe",
+      "size": 90375579,
+      "content_type": "application/octet-stream",
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Windows_Installer_V2.3.0.exe",
+      "updated_at": "2025-03-20T13:18:22Z"
+    },
+    {
+      "id": 239252802,
+      "name": "OrcaSlicer_Windows_V2.3.0_portable.zip",
+      "size": 113993068,
       "content_type": "application/zip",
-      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Windows_V2.3.1_portable.zip",
-      "updated_at": "2025-10-05T02:36:32Z"
+      "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Windows_V2.3.0_portable.zip",
+      "updated_at": "2025-03-20T13:19:14Z"
     }
   ]
 }

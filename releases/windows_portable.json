@@ -1,12 +1,12 @@
 {
-  "tag_name": "v2.3.1",
-  "upstream_release_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.1",
+  "tag_name": "v2.3.0",
+  "upstream_release_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.0",
   "asset": {
-    "id": 300639019,
-    "name": "OrcaSlicer_Windows_V2.3.1_portable.zip",
-    "size": 123887970,
+    "id": 239252802,
+    "name": "OrcaSlicer_Windows_V2.3.0_portable.zip",
+    "size": 113993068,
     "content_type": "application/zip",
-    "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Windows_V2.3.1_portable.zip",
-    "updated_at": "2025-10-05T02:36:32Z"
+    "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.0/OrcaSlicer_Windows_V2.3.0_portable.zip",
+    "updated_at": "2025-03-20T13:19:14Z"
   }
 }
