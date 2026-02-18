@@ -129,9 +129,10 @@ jobs:
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
             gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" ".tmp/${CONFIGS_ASSET_NAME}" --clobber
-            gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}"
+            gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}" --latest
           else
             gh release create "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" ".tmp/${CONFIGS_ASSET_NAME}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
-              --notes-file "${NOTES_FILE}"
+              --notes-file "${NOTES_FILE}" \
+              --latest
           fi
