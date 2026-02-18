@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-02-18T05:39:59Z",
-  "source_zip": "release_with_configs.zip",
+  "generated_at_utc": "2026-02-18T05:41:11Z",
+  "source_zip": "OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip",
   "printers": [
     "Dremel 3D45",
     "Flashforge Adventurer 5M Pro"
