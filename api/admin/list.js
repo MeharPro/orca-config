@@ -45,6 +45,20 @@ async function ghRequest(path, { method = "GET", token } = {}) {
   return await res.json();
 }
 
+async function loadProfileCatalog(owner, repo, token) {
+  try {
+    const file = await ghRequest(`/repos/${owner}/${repo}/contents/releases/profile_catalog.json`, {
+      token,
+    });
+    if (!file || file.type !== "file" || !file.content) return null;
+    const decoded = Buffer.from(String(file.content).replace(/\n/g, ""), "base64").toString("utf8");
+    const parsed = JSON.parse(decoded);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch (_) {
+    return null;
+  }
+}
+
 async function listRecursive(owner, repo, token, path) {
   const items = await ghRequest(`/repos/${owner}/${repo}/contents/${path}`, {
     token,
@@ -103,6 +117,43 @@ export default async function handler(req, res) {
     if (!owner || !repo) {
       json(res, 500, { ok: false, error: "Invalid MIRROR_REPO" });
       return;
+    }
+
+    const catalog = await loadProfileCatalog(owner, repo, GITHUB_PAT);
+    if (catalog) {
+      if (target === "printers") {
+        const profiles = Array.isArray(catalog.printers) ? catalog.printers : [];
+        json(res, 200, {
+          ok: true,
+          target,
+          profiles,
+          source: "release_catalog",
+          generated_at_utc: catalog.generated_at_utc || null,
+        });
+        return;
+      }
+      if (target === "filaments") {
+        const profiles = Array.isArray(catalog.filaments) ? catalog.filaments : [];
+        json(res, 200, {
+          ok: true,
+          target,
+          profiles,
+          source: "release_catalog",
+          generated_at_utc: catalog.generated_at_utc || null,
+        });
+        return;
+      }
+      if (target === "processes") {
+        const profiles = Array.isArray(catalog.processes) ? catalog.processes : [];
+        json(res, 200, {
+          ok: true,
+          target,
+          profiles,
+          source: "release_catalog",
+          generated_at_utc: catalog.generated_at_utc || null,
+        });
+        return;
+      }
     }
 
     if (target === "printers") {

@@ -1,0 +1,328 @@
+{
+  "generated_at_utc": "2026-02-18T05:39:59Z",
+  "source_zip": "release_with_configs.zip",
+  "printers": [
+    "Dremel 3D45",
+    "Flashforge Adventurer 5M Pro"
+  ],
+  "filaments": [
+    "Dremel Generic PLA",
+    "Dremel Generic PLA @3D45 all",
+    "Flashforge Generic ABS",
+    "Flashforge Generic PLA"
+  ],
+  "processes": [
+    "0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle",
+    "0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle",
+    "0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle",
+    "Dremel 3D45 Optimized Quality"
+  ],
+  "vendors": {
+    "Afinia": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Anker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Anycubic": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Artillery": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "BBL": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "BIQU": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Blocks": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "CONSTRUCT3D": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Chuanying": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Co Print": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "CoLiDo": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Comgrow": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Creality": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Cubicon": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Custom": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "DeltaMaker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Dremel": {
+      "printers": [
+        "Dremel 3D45"
+      ],
+      "filaments": [
+        "Dremel Generic PLA",
+        "Dremel Generic PLA @3D45 all"
+      ],
+      "processes": [
+        "Dremel 3D45 Optimized Quality"
+      ]
+    },
+    "Elegoo": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Eryone": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "FLSun": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Flashforge": {
+      "printers": [
+        "Flashforge Adventurer 5M Pro"
+      ],
+      "filaments": [
+        "Flashforge Generic ABS",
+        "Flashforge Generic PLA"
+      ],
+      "processes": [
+        "0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle",
+        "0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle",
+        "0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle"
+      ]
+    },
+    "FlyingBear": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Folgertech": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Geeetech": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Ginger Additive": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "InfiMech": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Kingroon": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Lulzbot": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "MagicMaker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Mellow": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "OrcaArena": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "OrcaFilamentLibrary": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Peopoly": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Phrozen": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Positron3D": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Prusa": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Qidi": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Raise3D": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Ratrig": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "RolohaunDesign": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "SecKit": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Snapmaker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Sovol": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Tiertime": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Tronxy": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "TwoTrees": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "UltiMaker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Vivedino": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Volumic": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Voron": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Voxelab": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Vzbot": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Wanhao France": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Wanhao": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "WonderMaker": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "Z-Bolt": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "blacklist": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "iQ": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    }
+  }
+}

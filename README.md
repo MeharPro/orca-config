@@ -40,6 +40,7 @@ How it works:
 - The API commits those files into the correct `configs/` subfolder in GitHub.
 - If you upload to the **overlay** target, the next automation run will bake those files into the portable zip automatically.
 - You can list/remove printer, filament, and process profiles from `/admin`.
+- The admin lists are sourced from `releases/profile_catalog.json` (generated from the actual packaged zip), so they reflect what Orca can currently see.
 
 Security notes:
 - Use a strong random `ADMIN_PASSWORD` only in Vercel env vars.

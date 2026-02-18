@@ -135,6 +135,8 @@ jobs:
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
           bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME}"
           (cd .tmp && sha256sum "${CUSTOM_ASSET_NAME}" > "${CUSTOM_ASSET_NAME}.sha256")
+          python3 scripts/build-profile-catalog.py ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/profile_catalog.json"
+          cp ".tmp/profile_catalog.json" "releases/profile_catalog.json"
           zip -qr ".tmp/${CONFIGS_ASSET_NAME}" configs -x "*/.gitkeep" -x "*/.DS_Store" || true
 
           NOTES_FILE=".tmp/release-notes.md"
@@ -160,4 +162,17 @@ jobs:
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
               --notes-file "${NOTES_FILE}" \
               --latest
+          fi
+
+      - name: Commit profile catalog
+        if: steps.rebuild.outputs.needs_build == 'true'
+        run: |
+          if [[ -n "$(git status --porcelain releases/profile_catalog.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add releases/profile_catalog.json
+            git commit -m "Update profile catalog for $(cat releases/latest_tag.txt)"
+            git push
+          else
+            echo "Profile catalog unchanged."
           fi
