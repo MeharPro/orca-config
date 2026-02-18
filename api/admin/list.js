@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 const ALLOWED_TARGETS = {
   printers: "configs/printers",
   filaments: "configs/filaments",
@@ -16,6 +18,14 @@ function sanitizePath(p) {
   if (normalized.includes("..")) return null;
   if (normalized.startsWith(".git")) return null;
   return normalized;
+}
+
+function safeEqual(input, secret) {
+  if (typeof input !== "string" || typeof secret !== "string") return false;
+  const a = Buffer.from(input, "utf8");
+  const b = Buffer.from(secret, "utf8");
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 async function ghRequest(path, { method = "GET", token } = {}) {
@@ -76,9 +86,8 @@ export default async function handler(req, res) {
 
     const incomingPw =
       req.headers["x-admin-password"] ||
-      req.headers["x-admin-secret"] ||
-      (req.query && req.query.password);
-    if (incomingPw !== ADMIN_PASSWORD) {
+      req.headers["x-admin-secret"];
+    if (!safeEqual(incomingPw, ADMIN_PASSWORD)) {
       json(res, 401, { ok: false, error: "Unauthorized" });
       return;
     }

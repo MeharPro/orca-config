@@ -12,6 +12,8 @@ What it does:
 - Checks `https://api.github.com/repos/OrcaSlicer/OrcaSlicer/releases/latest`
 - If there’s a new tag, updates files under `releases/`
 - Downloads the **Windows Portable** asset, overlays your files from `configs/portable-overlay/root/`, rezips, and uploads it to this repo’s **GitHub Release** with the same tag
+- Marks the synced tag as this repo's **Latest** release automatically
+- Publishes mirror-owned release notes (and links upstream), instead of copying upstream notes text
 
 ## Daily Sync (Vercel Cron Backup)
 
@@ -37,6 +39,12 @@ How it works:
 - You upload a folder from the browser (it preserves relative paths).
 - The API commits those files into the correct `configs/` subfolder in GitHub.
 - If you upload to the **overlay** target, the next automation run will bake those files into the portable zip automatically.
+- You can list/remove printer, filament, and process profiles from `/admin`.
+
+Security notes:
+- Use a strong random `ADMIN_PASSWORD` only in Vercel env vars.
+- The admin APIs now accept password only via request headers (not URL query params).
+- Keep Vercel deployment protection enabled and do not share the admin URL publicly.
 
 ## Custom Presets
 
