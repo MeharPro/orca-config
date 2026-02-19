@@ -2,6 +2,7 @@
 
 This repo:
 - Mirrors the latest **OrcaSlicer Windows Portable** release asset from `OrcaSlicer/OrcaSlicer`
+- Mirrors the latest **OrcaSlicer macOS Universal DMG** release asset from `OrcaSlicer/OrcaSlicer`
 - Keeps your custom OrcaSlicer presets in git under `configs/`
 
 ## Daily Sync (GitHub Actions)
@@ -12,6 +13,7 @@ What it does:
 - Checks `https://api.github.com/repos/OrcaSlicer/OrcaSlicer/releases/latest`
 - If there’s a new tag, updates files under `releases/`
 - Downloads the **Windows Portable** asset, overlays your files from `configs/portable-overlay/root/`, rezips, and uploads it to this repo’s **GitHub Release** with the same tag
+- Mirrors the upstream **macOS Universal DMG** asset into this repo’s release for the same tag
 - Marks the synced tag as this repo's **Latest** release automatically
 - Publishes mirror-owned release notes (and links upstream), instead of copying upstream notes text
 
