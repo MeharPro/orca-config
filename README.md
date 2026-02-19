@@ -62,6 +62,16 @@ To ship a “pre-configured” portable build, put files under:
 
 These files must match the same paths inside the upstream portable zip (example: `resources/profiles/...`).
 
+## Custom Branding
+
+This repo can replace OrcaSlicer UI logo assets in the packaged portable zip.
+
+- Source logo: `branding/school-logo.png`
+- Generator: `scripts/generate-school-branding.py`
+- Output overlay: `configs/portable-overlay/root/resources/images/`
+
+When those overlay files are present, every automated repackage/release uses the school branding assets.
+
 ## Install (Windows)
 
 From PowerShell:
