@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-02-20T04:22:40Z",
+  "generated_at_utc": "2026-02-20T05:27:50Z",
   "source_zip": "OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip",
   "printers": [
     "Dremel 3D45",
@@ -104,7 +104,9 @@
       ],
       "filaments": [
         "Dremel Generic PLA",
-        "Dremel Generic PLA @3D45 all"
+        "Dremel Generic PLA @3D45 all",
+        "Flashforge Generic ABS",
+        "Flashforge Generic PLA"
       ],
       "processes": [
         "Dremel 3D45 Optimized Quality"
