@@ -36,6 +36,7 @@ WORK_DIR="$(mktemp -d)"
 RW_DMG="${WORK_DIR}/upstream_rw.dmg"
 MOUNT_DIR="${WORK_DIR}/mount"
 ATTACHED_DEVICE=""
+STAGE_APP=""
 
 detach_image() {
   local target="${1:-}"
@@ -80,21 +81,25 @@ if [[ -z "${SOURCE_APP}" ]]; then
   exit 2
 fi
 APP_NAME="$(basename "${SOURCE_APP}")"
+STAGE_APP="${WORK_DIR}/${APP_NAME}"
 
-if [[ ! -d "${SOURCE_APP}/Contents/Resources" ]]; then
-  echo "Missing app resources folder: ${SOURCE_APP}/Contents/Resources" >&2
+# Work on a local app copy so codesign runs on a normal writable filesystem.
+ditto "${SOURCE_APP}" "${STAGE_APP}"
+
+if [[ ! -d "${STAGE_APP}/Contents/Resources" ]]; then
+  echo "Missing app resources folder: ${STAGE_APP}/Contents/Resources" >&2
   exit 2
 fi
 
 if [[ -n "${OVERLAY_DIR}" && -d "${OVERLAY_DIR}/resources" ]]; then
-  cp -a "${OVERLAY_DIR}/resources/." "${SOURCE_APP}/Contents/Resources/"
+  cp -a "${OVERLAY_DIR}/resources/." "${STAGE_APP}/Contents/Resources/"
 fi
 
 # Apply the same curated printer/filament/process pruning as Windows.
-bash "${ROOT_DIR}/scripts/prune-portable-profiles.sh" "${SOURCE_APP}/Contents"
+bash "${ROOT_DIR}/scripts/prune-portable-profiles.sh" "${STAGE_APP}/Contents"
 
-mkdir -p "${SOURCE_APP}/Contents/Resources/orca-config"
-cat > "${SOURCE_APP}/Contents/Resources/orca-config/README.txt" <<'TXT'
+mkdir -p "${STAGE_APP}/Contents/Resources/orca-config"
+cat > "${STAGE_APP}/Contents/Resources/orca-config/README.txt" <<'TXT'
 This OrcaSlicer macOS DMG was repackaged by MeharPro/orca-config.
 
 Injected from:
@@ -106,8 +111,12 @@ TXT
 
 if command -v codesign >/dev/null 2>&1; then
   # Re-sign because changing bundle resources invalidates the upstream signature.
-  codesign --force --deep --sign - --timestamp=none "${SOURCE_APP}"
+  codesign --force --deep --sign - --timestamp=none "${STAGE_APP}"
 fi
+
+# Put the signed app back into the writable DMG.
+rm -rf "${SOURCE_APP}"
+ditto "${STAGE_APP}" "${SOURCE_APP}"
 
 sync || true
 detach_image "${MOUNT_DIR}"
