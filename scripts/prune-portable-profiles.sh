@@ -7,9 +7,15 @@ if [[ -z "${EXTRACT_DIR}" ]]; then
   exit 2
 fi
 
-PROFILES_DIR="${EXTRACT_DIR}/resources/profiles"
-if [[ ! -d "${PROFILES_DIR}" ]]; then
-  echo "Profiles directory not found: ${PROFILES_DIR}" >&2
+PROFILES_DIR=""
+if [[ -d "${EXTRACT_DIR}/resources/profiles" ]]; then
+  PROFILES_DIR="${EXTRACT_DIR}/resources/profiles"
+elif [[ -d "${EXTRACT_DIR}/Resources/profiles" ]]; then
+  PROFILES_DIR="${EXTRACT_DIR}/Resources/profiles"
+fi
+
+if [[ -z "${PROFILES_DIR}" ]]; then
+  echo "Profiles directory not found under ${EXTRACT_DIR}/resources/profiles or ${EXTRACT_DIR}/Resources/profiles" >&2
   exit 2
 fi
 

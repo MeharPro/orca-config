@@ -203,18 +203,25 @@ candidates.sort(
 )
 
 selected = candidates[0]
+selected_name = str(selected.get("name") or "")
+custom_win_asset_name = (
+    f"{selected_name[:-4]}_with_configs.zip"
+    if selected_name.lower().endswith(".zip")
+    else f"{selected_name}_with_configs.zip"
+)
 
 win_doc = {
     "tag_name": tag,
     "upstream_release_url": url,
     "asset": selected,
+    "custom_asset_name": custom_win_asset_name,
 }
 Path(win_json_file).write_text(json.dumps(win_doc, indent=2) + "\n")
 
 asset_name = selected.get("name") or ""
 asset_url = selected.get("browser_download_url") or ""
 asset_size = selected.get("size") or 0
-mirror_url = mirror_download_url(tag, asset_name)
+mirror_url = mirror_download_url(tag, custom_win_asset_name)
 
 win_md_lines = [
     "# OrcaSlicer Windows Portable (Latest)",
@@ -227,6 +234,8 @@ if url:
     win_md_lines.append(f"- Upstream Release: {url}")
 if asset_name:
     win_md_lines.append(f"- Asset: {asset_name}")
+if custom_win_asset_name:
+    win_md_lines.append(f"- Custom Mirror Asset: {custom_win_asset_name}")
 if asset_size:
     win_md_lines.append(f"- Size (bytes): {asset_size}")
 if asset_url:
@@ -250,17 +259,24 @@ if mac_candidates:
         reverse=True,
     )
     mac_selected = mac_candidates[0]
+    mac_selected_name = str(mac_selected.get("name") or "")
+    custom_mac_asset_name = (
+        f"{mac_selected_name[:-4]}_with_configs.dmg"
+        if mac_selected_name.lower().endswith(".dmg")
+        else f"{mac_selected_name}_with_configs.dmg"
+    )
     mac_doc = {
         "tag_name": tag,
         "upstream_release_url": url,
         "asset": mac_selected,
+        "custom_asset_name": custom_mac_asset_name,
     }
     Path(mac_json_file).write_text(json.dumps(mac_doc, indent=2) + "\n")
 
     mac_name = mac_selected.get("name") or ""
     mac_url = mac_selected.get("browser_download_url") or ""
     mac_size = mac_selected.get("size") or 0
-    mac_mirror_url = mirror_download_url(tag, mac_name)
+    mac_mirror_url = mirror_download_url(tag, custom_mac_asset_name)
     mac_md_lines = [
         "# OrcaSlicer Mac Universal DMG (Latest)",
         "",
@@ -272,6 +288,8 @@ if mac_candidates:
         mac_md_lines.append(f"- Upstream Release: {url}")
     if mac_name:
         mac_md_lines.append(f"- Asset: {mac_name}")
+    if custom_mac_asset_name:
+        mac_md_lines.append(f"- Custom Mirror Asset: {custom_mac_asset_name}")
     if mac_size:
         mac_md_lines.append(f"- Size (bytes): {mac_size}")
     if mac_url:
@@ -287,6 +305,7 @@ else:
                 "tag_name": tag,
                 "upstream_release_url": url,
                 "asset": None,
+                "custom_asset_name": None,
             },
             indent=2,
         )

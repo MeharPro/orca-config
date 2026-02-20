@@ -8,5 +8,6 @@
     "content_type": "application/x-apple-diskimage",
     "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Mac_universal_V2.3.1.dmg",
     "updated_at": "2025-10-05T02:36:26Z"
-  }
+  },
+  "custom_asset_name": "OrcaSlicer_Mac_universal_V2.3.1_with_configs.dmg"
 }

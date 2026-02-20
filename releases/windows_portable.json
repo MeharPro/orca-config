@@ -8,5 +8,6 @@
     "content_type": "application/zip",
     "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Windows_V2.3.1_portable.zip",
     "updated_at": "2025-10-05T02:36:32Z"
-  }
+  },
+  "custom_asset_name": "OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip"
 }
