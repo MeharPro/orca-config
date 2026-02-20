@@ -63,8 +63,17 @@ rewrite_json "${DREMEL_JSON}" '
     .name == "fdm_filament_common" or
     .name == "fdm_filament_pla" or
     .name == "Dremel Generic PLA" or
-    .name == "Dremel Generic PLA @3D45 all"
-  ))
+    .name == "Dremel Generic PLA @3D45 all" or
+    .name == "Flashforge Generic PLA" or
+    .name == "Flashforge Generic ABS"
+  )) |
+  .filament_list = (
+    .filament_list + [
+      {"name":"Flashforge Generic PLA","sub_path":"filament/Flashforge Generic PLA.json"},
+      {"name":"Flashforge Generic ABS","sub_path":"filament/Flashforge Generic ABS.json"}
+    ]
+    | unique_by(.name)
+  )
 '
 
 rewrite_json "${FLASHFORGE_JSON}" '
@@ -109,10 +118,14 @@ rewrite_json "${ORCA_FILAMENT_LIBRARY_JSON}" '
 
 # Align defaults with the curated filament choices.
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45.json" '
-  .default_materials = "Dremel Generic PLA @3D45 all"
+  .default_materials = "Dremel Generic PLA @3D45 all;Flashforge Generic PLA;Flashforge Generic ABS"
 '
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45 0.4 nozzle.json" '
-  .default_filament_profile = ["Dremel Generic PLA @3D45 all"] |
+  .default_filament_profile = [
+    "Dremel Generic PLA @3D45 all",
+    "Flashforge Generic PLA",
+    "Flashforge Generic ABS"
+  ] |
   .default_print_profile = "Dremel 3D45 Optimized Quality"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.json" '
@@ -134,7 +147,7 @@ for filament in \
   "${PROFILES_DIR}/Flashforge/filament/Flashforge Generic ABS.json"; do
   if [[ -f "${filament}" ]]; then
     rewrite_json "${filament}" '
-      .compatible_printers = ((.compatible_printers // []) + ["Dremel 3D45 0.4 nozzle"] | unique)
+      .compatible_printers = ((.compatible_printers // []) + ["Dremel 3D45", "Dremel 3D45 0.4 nozzle"] | unique)
     '
   fi
 done
