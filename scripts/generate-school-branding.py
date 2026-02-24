@@ -72,6 +72,7 @@ def main() -> int:
     logo = load_logo(Path(args.logo))
     overlay_root = Path(args.overlay_root)
     images_root = overlay_root / "resources" / "images"
+    web_images_root = overlay_root / "resources" / "web" / "image"
 
     png_targets = [
         ("OrcaSlicer.png", 154, 154, False),
@@ -88,6 +89,14 @@ def main() -> int:
     ]
     for name, w, h, gray in png_targets:
         save_png(logo, images_root / name, w, h, grayscale=gray)
+
+    # Web onboarding/homepage logo assets used in Windows portable UI screens.
+    web_png_targets = [
+        ("logo.png", 154, 154, False),
+        ("logo2.png", 339, 406, False),
+    ]
+    for name, w, h, gray in web_png_targets:
+        save_png(logo, web_images_root / name, w, h, grayscale=gray)
 
     save_ico(logo, images_root / "OrcaSlicer.ico")
     save_ico(logo, images_root / "OrcaSlicer-mac_256px.ico")
