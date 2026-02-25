@@ -102,9 +102,23 @@ jobs:
           if [[ "${NEEDS_BUILD}" != "true" ]]; then
             if gh release view "${TAG}" --json assets >/dev/null 2>&1; then
               ASSET_NAMES="$(gh release view "${TAG}" --json assets --jq '.assets[].name')"
-              if ! printf '%s\n' "${ASSET_NAMES}" | grep -Fxq "${WINDOWS_CUSTOM_ASSET_NAME}"; then
+              HAS_WINDOWS="false"
+              HAS_MAC="false"
+              while IFS= read -r ASSET; do
+                [[ -z "${ASSET}" ]] && continue
+                if [[ "${ASSET}" == "${WINDOWS_CUSTOM_ASSET_NAME}" || "${ASSET}" == rev*_"${WINDOWS_CUSTOM_ASSET_NAME}" ]]; then
+                  HAS_WINDOWS="true"
+                fi
+                if [[ -n "${MAC_CUSTOM_ASSET_NAME}" ]]; then
+                  if [[ "${ASSET}" == "${MAC_CUSTOM_ASSET_NAME}" || "${ASSET}" == rev*_"${MAC_CUSTOM_ASSET_NAME}" ]]; then
+                    HAS_MAC="true"
+                  fi
+                fi
+              done <<< "${ASSET_NAMES}"
+
+              if [[ "${HAS_WINDOWS}" != "true" ]]; then
                 NEEDS_BUILD="true"
-              elif [[ -n "${MAC_CUSTOM_ASSET_NAME}" ]] && ! printf '%s\n' "${ASSET_NAMES}" | grep -Fxq "${MAC_CUSTOM_ASSET_NAME}"; then
+              elif [[ -n "${MAC_CUSTOM_ASSET_NAME}" && "${HAS_MAC}" != "true" ]]; then
                 NEEDS_BUILD="true"
               fi
             else
@@ -144,16 +158,22 @@ jobs:
           set -euo pipefail
 
           TAG="${{ steps.rebuild.outputs.tag }}"
+          BUILD_REV="rev${GITHUB_RUN_NUMBER}"
           ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
           ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
           CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.windows_custom_asset_name }}"
+          CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_ASSET_NAME}"
           MAC_CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.mac_custom_asset_name }}"
+          MAC_CUSTOM_ASSET_NAME_REV=""
+          if [[ -n "${MAC_CUSTOM_ASSET_NAME}" ]]; then
+            MAC_CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${MAC_CUSTOM_ASSET_NAME}"
+          fi
           UPSTREAM_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["upstream_release_url"])')"
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
-          bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME}"
-          python3 scripts/build-profile-catalog.py ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/profile_catalog.json"
+          bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME_REV}"
+          python3 scripts/build-profile-catalog.py ".tmp/${CUSTOM_ASSET_NAME_REV}" ".tmp/profile_catalog.json"
           cp ".tmp/profile_catalog.json" "releases/profile_catalog.json"
 
           NOTES_FILE=".tmp/release-notes.md"
@@ -166,18 +186,18 @@ jobs:
           
           - Upstream tag: ${TAG}
           - Upstream release: ${UPSTREAM_URL}
-          - Included Windows asset: ${CUSTOM_ASSET_NAME}
-          - Included macOS asset: ${MAC_CUSTOM_ASSET_NAME}
+          - Included Windows asset: ${CUSTOM_ASSET_NAME_REV}
+          - Included macOS asset: ${MAC_CUSTOM_ASSET_NAME_REV}
           
           For official OrcaSlicer changelog details, use the upstream release link above.
           EOF
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" --clobber
+            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME_REV}" --clobber
             gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}" --latest
           else
             gh release create "${TAG}" \
-              ".tmp/${CUSTOM_ASSET_NAME}" \
+              ".tmp/${CUSTOM_ASSET_NAME_REV}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
               --notes-file "${NOTES_FILE}" \
               --latest
@@ -213,12 +233,15 @@ jobs:
           set -euo pipefail
 
           TAG="${{ needs.sync.outputs.tag }}"
+          BUILD_REV="rev${GITHUB_RUN_NUMBER}"
           WINDOWS_CUSTOM_ASSET_NAME="${{ needs.sync.outputs.windows_custom_asset_name }}"
+          WINDOWS_CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${WINDOWS_CUSTOM_ASSET_NAME}"
           CUSTOM_MAC_ASSET_NAME="${{ needs.sync.outputs.mac_custom_asset_name }}"
           if [[ -z "${CUSTOM_MAC_ASSET_NAME}" ]]; then
             echo "No macOS DMG asset defined for this tag; skipping."
             exit 0
           fi
+          CUSTOM_MAC_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_MAC_ASSET_NAME}"
 
           MAC_UPSTREAM_NAME="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("name",""))')"
           MAC_UPSTREAM_URL="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("browser_download_url",""))')"
@@ -229,13 +252,13 @@ jobs:
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${MAC_UPSTREAM_NAME}" "${MAC_UPSTREAM_URL}"
-          bash scripts/repackage-mac-universal.sh ".tmp/${MAC_UPSTREAM_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_MAC_ASSET_NAME}"
+          bash scripts/repackage-mac-universal.sh ".tmp/${MAC_UPSTREAM_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}"
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" ".tmp/${CUSTOM_MAC_ASSET_NAME}" --clobber
+            gh release upload "${TAG}" ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}" --clobber
           else
             gh release create "${TAG}" \
-              ".tmp/${CUSTOM_MAC_ASSET_NAME}" \
+              ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)"
           fi
 
@@ -243,7 +266,7 @@ jobs:
           ASSET_NAMES="$(gh release view "${TAG}" --json assets --jq '.assets[].name')"
           while IFS= read -r ASSET; do
             [[ -z "${ASSET}" ]] && continue
-            if [[ "${ASSET}" == "${WINDOWS_CUSTOM_ASSET_NAME}" || "${ASSET}" == "${CUSTOM_MAC_ASSET_NAME}" ]]; then
+            if [[ "${ASSET}" == "${WINDOWS_CUSTOM_ASSET_NAME_REV}" || "${ASSET}" == "${CUSTOM_MAC_ASSET_NAME_REV}" ]]; then
               continue
             fi
             gh release delete-asset "${TAG}" "${ASSET}" -y
