@@ -144,29 +144,17 @@ jobs:
           set -euo pipefail
 
           TAG="${{ steps.rebuild.outputs.tag }}"
-          BUILD_REV="rev${GITHUB_RUN_NUMBER}"
           ASSET_NAME="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["name"])')"
           ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
           CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.windows_custom_asset_name }}"
           MAC_CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.mac_custom_asset_name }}"
-          CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_ASSET_NAME}"
-          if [[ -n "${MAC_CUSTOM_ASSET_NAME}" ]]; then
-            MAC_CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${MAC_CUSTOM_ASSET_NAME}"
-          else
-            MAC_CUSTOM_ASSET_NAME_REV=""
-          fi
-          CONFIGS_ASSET_NAME="orca-configs_${TAG}.zip"
           UPSTREAM_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["upstream_release_url"])')"
 
           mkdir -p .tmp
           curl -fL -o ".tmp/${ASSET_NAME}" "${ASSET_URL}"
           bash scripts/repackage-windows-portable.sh ".tmp/${ASSET_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_ASSET_NAME}"
-          cp ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME_REV}"
-          (cd .tmp && sha256sum "${CUSTOM_ASSET_NAME}" > "${CUSTOM_ASSET_NAME}.sha256")
-          (cd .tmp && sha256sum "${CUSTOM_ASSET_NAME_REV}" > "${CUSTOM_ASSET_NAME_REV}.sha256")
           python3 scripts/build-profile-catalog.py ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/profile_catalog.json"
           cp ".tmp/profile_catalog.json" "releases/profile_catalog.json"
-          zip -qr ".tmp/${CONFIGS_ASSET_NAME}" configs -x "*/.gitkeep" -x "*/.DS_Store" || true
 
           NOTES_FILE=".tmp/release-notes.md"
           cat > "${NOTES_FILE}" <<EOF
@@ -177,29 +165,19 @@ jobs:
           It repackages OrcaSlicer macOS Universal DMG with the same configs in a separate macOS build job.
           
           - Upstream tag: ${TAG}
-          - Build revision: ${BUILD_REV}
           - Upstream release: ${UPSTREAM_URL}
           - Included Windows asset: ${CUSTOM_ASSET_NAME}
-          - Included Windows revision asset: ${CUSTOM_ASSET_NAME_REV}
           - Included macOS asset: ${MAC_CUSTOM_ASSET_NAME}
-          - Included macOS revision asset: ${MAC_CUSTOM_ASSET_NAME_REV}
-          - Config bundle: ${CONFIGS_ASSET_NAME}
           
           For official OrcaSlicer changelog details, use the upstream release link above.
           EOF
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" \
-              ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" \
-              ".tmp/${CUSTOM_ASSET_NAME_REV}" ".tmp/${CUSTOM_ASSET_NAME_REV}.sha256" \
-              ".tmp/${CONFIGS_ASSET_NAME}" \
-              --clobber
+            gh release upload "${TAG}" ".tmp/${CUSTOM_ASSET_NAME}" --clobber
             gh release edit "${TAG}" --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" --notes-file "${NOTES_FILE}" --latest
           else
             gh release create "${TAG}" \
-              ".tmp/${CUSTOM_ASSET_NAME}" ".tmp/${CUSTOM_ASSET_NAME}.sha256" \
-              ".tmp/${CUSTOM_ASSET_NAME_REV}" ".tmp/${CUSTOM_ASSET_NAME_REV}.sha256" \
-              ".tmp/${CONFIGS_ASSET_NAME}" \
+              ".tmp/${CUSTOM_ASSET_NAME}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)" \
               --notes-file "${NOTES_FILE}" \
               --latest
@@ -235,13 +213,12 @@ jobs:
           set -euo pipefail
 
           TAG="${{ needs.sync.outputs.tag }}"
-          BUILD_REV="rev${GITHUB_RUN_NUMBER}"
+          WINDOWS_CUSTOM_ASSET_NAME="${{ needs.sync.outputs.windows_custom_asset_name }}"
           CUSTOM_MAC_ASSET_NAME="${{ needs.sync.outputs.mac_custom_asset_name }}"
           if [[ -z "${CUSTOM_MAC_ASSET_NAME}" ]]; then
             echo "No macOS DMG asset defined for this tag; skipping."
             exit 0
           fi
-          CUSTOM_MAC_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_MAC_ASSET_NAME}"
 
           MAC_UPSTREAM_NAME="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("name",""))')"
           MAC_UPSTREAM_URL="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("browser_download_url",""))')"
@@ -253,18 +230,21 @@ jobs:
           mkdir -p .tmp
           curl -fL -o ".tmp/${MAC_UPSTREAM_NAME}" "${MAC_UPSTREAM_URL}"
           bash scripts/repackage-mac-universal.sh ".tmp/${MAC_UPSTREAM_NAME}" "configs/portable-overlay/root" ".tmp/${CUSTOM_MAC_ASSET_NAME}"
-          cp ".tmp/${CUSTOM_MAC_ASSET_NAME}" ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}"
-          (cd .tmp && shasum -a 256 "${CUSTOM_MAC_ASSET_NAME}" > "${CUSTOM_MAC_ASSET_NAME}.sha256")
-          (cd .tmp && shasum -a 256 "${CUSTOM_MAC_ASSET_NAME_REV}" > "${CUSTOM_MAC_ASSET_NAME_REV}.sha256")
 
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            gh release upload "${TAG}" \
-              ".tmp/${CUSTOM_MAC_ASSET_NAME}" ".tmp/${CUSTOM_MAC_ASSET_NAME}.sha256" \
-              ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}" ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}.sha256" \
-              --clobber
+            gh release upload "${TAG}" ".tmp/${CUSTOM_MAC_ASSET_NAME}" --clobber
           else
             gh release create "${TAG}" \
-              ".tmp/${CUSTOM_MAC_ASSET_NAME}" ".tmp/${CUSTOM_MAC_ASSET_NAME}.sha256" \
-              ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}" ".tmp/${CUSTOM_MAC_ASSET_NAME_REV}.sha256" \
+              ".tmp/${CUSTOM_MAC_ASSET_NAME}" \
               --title "OrcaSlicer ${TAG} (Windows Portable + Configs)"
           fi
+
+          # Keep release clean: retain only the packaged Windows + macOS artifacts.
+          ASSET_NAMES="$(gh release view "${TAG}" --json assets --jq '.assets[].name')"
+          while IFS= read -r ASSET; do
+            [[ -z "${ASSET}" ]] && continue
+            if [[ "${ASSET}" == "${WINDOWS_CUSTOM_ASSET_NAME}" || "${ASSET}" == "${CUSTOM_MAC_ASSET_NAME}" ]]; then
+              continue
+            fi
+            gh release delete-asset "${TAG}" "${ASSET}" -y
+          done <<< "${ASSET_NAMES}"
