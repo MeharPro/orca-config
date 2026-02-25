@@ -48,61 +48,58 @@ done
 # Keep all upstream files on disk for runtime safety. Only rewrite manifests so
 # OrcaSlicer exposes the curated profile set in the UI.
 rewrite_json "${DREMEL_JSON}" '
-  .machine_model_list |= map(select(.name == "Dremel 3D45")) |
-  .machine_list |= map(select(
-    .name == "fdm_machine_common" or
-    .name == "fdm_dremel_common" or
-    .name == "Dremel 3D45 0.4 nozzle"
-  )) |
-  .process_list |= map(select(
-    .name == "fdm_process_common" or
-    .name == "fdm_process_dremel_common" or
-    .name == "Dremel 3D45 Optimized Quality"
-  )) |
-  .filament_list |= map(select(
-    .name == "fdm_filament_common" or
-    .name == "fdm_filament_pla" or
-    .name == "Dremel Generic PLA" or
-    .name == "Dremel Generic PLA @3D45 all" or
-    .name == "Flashforge Generic PLA" or
-    .name == "Flashforge Generic ABS"
-  )) |
-  .filament_list = (
-    .filament_list + [
-      {"name":"Flashforge Generic PLA","sub_path":"filament/Flashforge Generic PLA.json"},
-      {"name":"Flashforge Generic ABS","sub_path":"filament/Flashforge Generic ABS.json"}
-    ]
-    | unique_by(.name)
-  )
+  .machine_model_list = [
+    {"name":"Dremel 3D45","sub_path":"machine/Dremel 3D45.json"}
+  ] |
+  .machine_list = [
+    {"name":"fdm_machine_common","sub_path":"machine/fdm_machine_common.json"},
+    {"name":"fdm_dremel_common","sub_path":"machine/fdm_dremel_common.json"},
+    {"name":"Dremel 3D45 0.4 nozzle","sub_path":"machine/Dremel 3D45 0.4 nozzle.json"}
+  ] |
+  .process_list = [
+    {"name":"fdm_process_common","sub_path":"process/fdm_process_common.json"},
+    {"name":"fdm_process_dremel_common","sub_path":"process/fdm_process_dremel_common.json"},
+    {"name":"Dremel 3D45 Optimized Quality","sub_path":"process/Dremel_3D45_Process_Optimized.json"}
+  ] |
+  .filament_list = [
+    {"name":"fdm_filament_common","sub_path":"filament/fdm_filament_common.json"},
+    {"name":"fdm_filament_pla","sub_path":"filament/fdm_filament_pla.json"},
+    {"name":"Dremel Generic PLA","sub_path":"filament/Dremel Generic PLA.json"},
+    {"name":"Dremel Generic PLA @3D45 all","sub_path":"filament/Dremel Generic PLA @3D45 all.json"},
+    {"name":"Flashforge Generic PLA","sub_path":"filament/Flashforge Generic PLA.json"},
+    {"name":"Flashforge Generic ABS","sub_path":"filament/Flashforge Generic ABS.json"}
+  ]
 '
 
 rewrite_json "${FLASHFORGE_JSON}" '
-  .machine_model_list |= map(select(.name == "Flashforge Adventurer 5M Pro")) |
-  .machine_list |= map(select(
-    .name == "fdm_machine_common" or
-    .name == "fdm_flashforge_common" or
-    .name == "fdm_adventurer5m_common" or
-    .name == "Flashforge Adventurer 5M Pro 0.4 Nozzle" or
-    .name == "Flashforge Adventurer 5M Pro 0.6 Nozzle" or
-    .name == "Flashforge Adventurer 5M Pro 0.8 Nozzle"
-  )) |
-  .process_list |= map(select(
-    .name == "fdm_process_common" or
-    .name == "fdm_process_flashforge_common" or
-    .name == "fdm_process_flashforge_0.20" or
-    .name == "fdm_process_flashforge_0.30" or
-    .name == "fdm_process_flashforge_0.40" or
-    .name == "0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle" or
-    .name == "0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle" or
-    .name == "0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle"
-  )) |
-  .filament_list |= map(select(
-    .name == "fdm_filament_common" or
-    .name == "fdm_filament_abs" or
-    .name == "fdm_filament_pla" or
-    .name == "Flashforge Generic PLA" or
-    .name == "Flashforge Generic ABS"
-  ))
+  .machine_model_list = [
+    {"name":"Flashforge Adventurer 5M Pro","sub_path":"machine/Flashforge Adventurer 5M Pro.json"}
+  ] |
+  .machine_list = [
+    {"name":"fdm_machine_common","sub_path":"machine/fdm_machine_common.json"},
+    {"name":"fdm_flashforge_common","sub_path":"machine/fdm_flashforge_common.json"},
+    {"name":"fdm_adventurer5m_common","sub_path":"machine/fdm_adventurer5m_common.json"},
+    {"name":"Flashforge Adventurer 5M Pro 0.4 Nozzle","sub_path":"machine/Flashforge Adventurer 5M Pro 0.4 Nozzle.json"},
+    {"name":"Flashforge Adventurer 5M Pro 0.6 Nozzle","sub_path":"machine/Flashforge Adventurer 5M Pro 0.6 Nozzle.json"},
+    {"name":"Flashforge Adventurer 5M Pro 0.8 Nozzle","sub_path":"machine/Flashforge Adventurer 5M Pro 0.8 Nozzle.json"}
+  ] |
+  .process_list = [
+    {"name":"fdm_process_common","sub_path":"process/fdm_process_common.json"},
+    {"name":"fdm_process_flashforge_common","sub_path":"process/fdm_process_flashforge_common.json"},
+    {"name":"fdm_process_flashforge_0.20","sub_path":"process/fdm_process_flashforge_0.20.json"},
+    {"name":"fdm_process_flashforge_0.30","sub_path":"process/fdm_process_flashforge_0.30.json"},
+    {"name":"fdm_process_flashforge_0.40","sub_path":"process/fdm_process_flashforge_0.40.json"},
+    {"name":"0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle","sub_path":"process/0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle.json"},
+    {"name":"0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle","sub_path":"process/0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle.json"},
+    {"name":"0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle","sub_path":"process/0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle.json"}
+  ] |
+  .filament_list = [
+    {"name":"fdm_filament_common","sub_path":"filament/fdm_filament_common.json"},
+    {"name":"fdm_filament_abs","sub_path":"filament/fdm_filament_abs.json"},
+    {"name":"fdm_filament_pla","sub_path":"filament/fdm_filament_pla.json"},
+    {"name":"Flashforge Generic PLA","sub_path":"filament/Flashforge Generic PLA.json"},
+    {"name":"Flashforge Generic ABS","sub_path":"filament/Flashforge Generic ABS.json"}
+  ]
 '
 
 rewrite_json "${CUSTOM_JSON}" '
@@ -140,6 +137,23 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.8 Nozzle.json" '
   .default_filament_profile = ["Flashforge Generic PLA"]
 '
+
+# Enable supports by default for the curated print profiles.
+rewrite_json "${PROFILES_DIR}/Dremel/process/Dremel_3D45_Process_Optimized.json" '
+  .enable_support = 1 |
+  .support_type = "tree(auto)"
+'
+for process in \
+  "${PROFILES_DIR}/Flashforge/process/0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle.json" \
+  "${PROFILES_DIR}/Flashforge/process/0.30mm Standard @Flashforge AD5M Pro 0.6 Nozzle.json" \
+  "${PROFILES_DIR}/Flashforge/process/0.40mm Standard @Flashforge AD5M Pro 0.8 Nozzle.json"; do
+  if [[ -f "${process}" ]]; then
+    rewrite_json "${process}" '
+      .enable_support = 1 |
+      .support_type = "tree(auto)"
+    '
+  fi
+done
 
 # Make Flashforge Generic PLA/ABS selectable on the Dremel profile as requested.
 for filament in \
