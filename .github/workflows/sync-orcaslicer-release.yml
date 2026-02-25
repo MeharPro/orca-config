@@ -149,17 +149,9 @@ jobs:
           ASSET_URL="$(python3 -c 'import json; print(json.load(open("releases/windows_portable.json"))["asset"]["browser_download_url"])')"
           CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.windows_custom_asset_name }}"
           MAC_CUSTOM_ASSET_NAME="${{ steps.rebuild.outputs.mac_custom_asset_name }}"
-          if [[ "${CUSTOM_ASSET_NAME}" == *.zip ]]; then
-            CUSTOM_ASSET_NAME_REV="${CUSTOM_ASSET_NAME%.zip}_${BUILD_REV}.zip"
-          else
-            CUSTOM_ASSET_NAME_REV="${CUSTOM_ASSET_NAME}_${BUILD_REV}"
-          fi
+          CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_ASSET_NAME}"
           if [[ -n "${MAC_CUSTOM_ASSET_NAME}" ]]; then
-            if [[ "${MAC_CUSTOM_ASSET_NAME}" == *.dmg ]]; then
-              MAC_CUSTOM_ASSET_NAME_REV="${MAC_CUSTOM_ASSET_NAME%.dmg}_${BUILD_REV}.dmg"
-            else
-              MAC_CUSTOM_ASSET_NAME_REV="${MAC_CUSTOM_ASSET_NAME}_${BUILD_REV}"
-            fi
+            MAC_CUSTOM_ASSET_NAME_REV="${BUILD_REV}_${MAC_CUSTOM_ASSET_NAME}"
           else
             MAC_CUSTOM_ASSET_NAME_REV=""
           fi
@@ -249,11 +241,7 @@ jobs:
             echo "No macOS DMG asset defined for this tag; skipping."
             exit 0
           fi
-          if [[ "${CUSTOM_MAC_ASSET_NAME}" == *.dmg ]]; then
-            CUSTOM_MAC_ASSET_NAME_REV="${CUSTOM_MAC_ASSET_NAME%.dmg}_${BUILD_REV}.dmg"
-          else
-            CUSTOM_MAC_ASSET_NAME_REV="${CUSTOM_MAC_ASSET_NAME}_${BUILD_REV}"
-          fi
+          CUSTOM_MAC_ASSET_NAME_REV="${BUILD_REV}_${CUSTOM_MAC_ASSET_NAME}"
 
           MAC_UPSTREAM_NAME="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("name",""))')"
           MAC_UPSTREAM_URL="$(python3 -c 'import json; d=json.load(open("releases/mac_universal.json")); a=d.get("asset") or {}; print(a.get("browser_download_url",""))')"

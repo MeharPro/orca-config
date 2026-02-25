@@ -115,27 +115,38 @@ rewrite_json "${ORCA_FILAMENT_LIBRARY_JSON}" '
 
 # Align defaults with the curated filament choices.
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45.json" '
-  .default_materials = "Dremel Generic PLA @3D45 all;Flashforge Generic PLA;Flashforge Generic ABS"
+  .default_materials = "Dremel Generic PLA @3D45 all;Flashforge Generic PLA;Flashforge Generic ABS" |
+  .default_bed_type = "Cool Plate"
 '
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45 0.4 nozzle.json" '
+  .setting_id = "GDREMEL45_04" |
+  .printer_settings_id = "Dremel 3D45 0.4 nozzle" |
   .default_filament_profile = [
     "Dremel Generic PLA @3D45 all",
     "Flashforge Generic PLA",
     "Flashforge Generic ABS"
   ] |
-  .default_print_profile = "Dremel 3D45 Optimized Quality"
+  .default_print_profile = "Dremel 3D45 Optimized Quality" |
+  .default_bed_type = "Cool Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.json" '
-  .default_materials = "Flashforge Generic PLA;Flashforge Generic ABS"
+  .default_materials = "Flashforge Generic PLA;Flashforge Generic ABS" |
+  .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.4 Nozzle.json" '
-  .default_filament_profile = ["Flashforge Generic PLA"]
+  .setting_id = "GFF5MP_04" |
+  .default_filament_profile = ["Flashforge Generic PLA"] |
+  .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.6 Nozzle.json" '
-  .default_filament_profile = ["Flashforge Generic PLA"]
+  .setting_id = "GFF5MP_06" |
+  .default_filament_profile = ["Flashforge Generic PLA"] |
+  .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.8 Nozzle.json" '
-  .default_filament_profile = ["Flashforge Generic PLA"]
+  .setting_id = "GFF5MP_08" |
+  .default_filament_profile = ["Flashforge Generic PLA"] |
+  .default_bed_type = "Textured PEI Plate"
 '
 
 # Enable supports by default for the curated print profiles.
