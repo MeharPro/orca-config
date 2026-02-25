@@ -11,6 +11,7 @@ on:
       - "configs/portable-overlay/**"
       - "scripts/repackage-mac-universal.sh"
       - "scripts/repackage-windows-portable.sh"
+      - "scripts/patch-windows-exe-icon.py"
       - "scripts/prune-portable-profiles.sh"
       - "scripts/sync-orcaslicer-release.sh"
       - ".github/workflows/sync-orcaslicer-release.yml"
@@ -127,6 +128,13 @@ jobs:
           else
             echo "Release ${TAG} does not exist yet; it will be created as latest in build step."
           fi
+
+      - name: Install Windows repack dependencies
+        if: steps.rebuild.outputs.needs_build == 'true'
+        run: |
+          set -euo pipefail
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade lief
 
       - name: Build Windows portable (with configs) and publish GitHub Release
         if: steps.rebuild.outputs.needs_build == 'true'

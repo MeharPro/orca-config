@@ -78,6 +78,20 @@ fi
 # the curated printer + filament set.
 bash "${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/scripts/prune-portable-profiles.sh" "${EXTRACT_DIR}"
 
+# Replace embedded executable icon so the Windows taskbar icon matches branding.
+PATCH_ROOT="${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+EXE_PATH="${EXTRACT_DIR}/orca-slicer.exe"
+ICON_PATH="${EXTRACT_DIR}/resources/images/OrcaSlicer.ico"
+if [[ ! -f "${EXE_PATH}" ]]; then
+  echo "Could not find Windows executable to patch icon: ${EXE_PATH}" >&2
+  exit 2
+fi
+if [[ ! -f "${ICON_PATH}" ]]; then
+  echo "Could not find icon source to patch executable: ${ICON_PATH}" >&2
+  exit 2
+fi
+python3 "${PATCH_ROOT}/scripts/patch-windows-exe-icon.py" --exe "${EXE_PATH}" --ico "${ICON_PATH}"
+
 # Add a small marker so it's obvious this archive was repackaged.
 mkdir -p "${EXTRACT_DIR}/orca-config"
 cat > "${EXTRACT_DIR}/orca-config/README.txt" <<'TXT'
