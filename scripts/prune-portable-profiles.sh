@@ -65,9 +65,7 @@ rewrite_json "${DREMEL_JSON}" '
     {"name":"fdm_filament_common","sub_path":"filament/fdm_filament_common.json"},
     {"name":"fdm_filament_pla","sub_path":"filament/fdm_filament_pla.json"},
     {"name":"Dremel Generic PLA","sub_path":"filament/Dremel Generic PLA.json"},
-    {"name":"Dremel Generic PLA @3D45 all","sub_path":"filament/Dremel Generic PLA @3D45 all.json"},
-    {"name":"Flashforge Generic PLA","sub_path":"filament/Flashforge Generic PLA.json"},
-    {"name":"Flashforge Generic ABS","sub_path":"filament/Flashforge Generic ABS.json"}
+    {"name":"Dremel Generic PLA @3D45 all","sub_path":"filament/Dremel Generic PLA @3D45 all.json"}
   ]
 '
 
@@ -115,17 +113,11 @@ rewrite_json "${ORCA_FILAMENT_LIBRARY_JSON}" '
 
 # Align defaults with the curated filament choices.
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45.json" '
-  .default_materials = "Dremel Generic PLA @3D45 all;Flashforge Generic PLA;Flashforge Generic ABS" |
-  .default_bed_type = "Cool Plate"
+  .default_materials = "Dremel Generic PLA @3D45 all"
 '
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45 0.4 nozzle.json" '
-  .default_filament_profile = [
-    "Dremel Generic PLA @3D45 all",
-    "Flashforge Generic PLA",
-    "Flashforge Generic ABS"
-  ] |
-  .default_print_profile = "Dremel 3D45 Optimized Quality" |
-  .default_bed_type = "Cool Plate"
+  .default_filament_profile = ["Dremel Generic PLA @3D45 all"] |
+  .default_print_profile = "Dremel 3D45 Optimized Quality"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.json" '
   .default_materials = "Flashforge Generic PLA;Flashforge Generic ABS" |
