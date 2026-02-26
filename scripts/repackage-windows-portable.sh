@@ -78,6 +78,16 @@ fi
 # the curated printer + filament set.
 bash "${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}/scripts/prune-portable-profiles.sh" "${EXTRACT_DIR}"
 
+# Force OrcaSlicer portable-user-data mode so it ignores any stale AppData
+# from older local installs and only uses config state from this package.
+mkdir -p "${EXTRACT_DIR}/data_dir"
+cat > "${EXTRACT_DIR}/data_dir/README.txt" <<'TXT'
+This folder enables OrcaSlicer portable user configuration mode.
+
+OrcaSlicer will store runtime/user presets in this local data_dir instead of
+reusing global AppData from other installs.
+TXT
+
 # Replace embedded executable icon so the Windows taskbar icon matches branding.
 PATCH_ROOT="${ROOT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 EXE_PATH="${EXTRACT_DIR}/orca-slicer.exe"
