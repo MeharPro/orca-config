@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-02-26T00:24:51Z",
-  "source_zip": "rev53_OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip",
+  "generated_at_utc": "2026-02-26T05:10:26Z",
+  "source_zip": "rev54_OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip",
   "printers": [
     "Dremel 3D45",
     "Flashforge Adventurer 5M Pro"
@@ -104,9 +104,7 @@
       ],
       "filaments": [
         "Dremel Generic PLA",
-        "Dremel Generic PLA @3D45 all",
-        "Flashforge Generic ABS",
-        "Flashforge Generic PLA"
+        "Dremel Generic PLA @3D45 all"
       ],
       "processes": [
         "Dremel 3D45 Optimized Quality"
