@@ -119,8 +119,6 @@ rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45.json" '
   .default_bed_type = "Cool Plate"
 '
 rewrite_json "${PROFILES_DIR}/Dremel/machine/Dremel 3D45 0.4 nozzle.json" '
-  .setting_id = "GDREMEL45_04" |
-  .printer_settings_id = "Dremel 3D45 0.4 nozzle" |
   .default_filament_profile = [
     "Dremel Generic PLA @3D45 all",
     "Flashforge Generic PLA",
@@ -134,17 +132,14 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.js
   .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.4 Nozzle.json" '
-  .setting_id = "GFF5MP_04" |
   .default_filament_profile = ["Flashforge Generic PLA"] |
   .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.6 Nozzle.json" '
-  .setting_id = "GFF5MP_06" |
   .default_filament_profile = ["Flashforge Generic PLA"] |
   .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.8 Nozzle.json" '
-  .setting_id = "GFF5MP_08" |
   .default_filament_profile = ["Flashforge Generic PLA"] |
   .default_bed_type = "Textured PEI Plate"
 '
