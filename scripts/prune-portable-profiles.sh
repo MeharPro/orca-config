@@ -124,6 +124,8 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro.js
   .default_bed_type = "Textured PEI Plate"
 '
 rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.4 Nozzle.json" '
+  .name = "0 Flashforge Adventurer 5M Pro 0.4 Nozzle" |
+  .alias = "Flashforge Adventurer 5M Pro 0.4 Nozzle" |
   .default_filament_profile = ["Flashforge Generic PLA"] |
   .default_bed_type = "Textured PEI Plate"
 '
@@ -139,7 +141,8 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
 # Enable supports by default for the curated print profiles.
 rewrite_json "${PROFILES_DIR}/Dremel/process/Dremel_3D45_Process_Optimized.json" '
   .enable_support = 1 |
-  .support_type = "tree(auto)"
+  .support_type = "tree(auto)" |
+  .support_style = "organic"
 '
 for process in \
   "${PROFILES_DIR}/Flashforge/process/0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle.json" \
@@ -148,10 +151,22 @@ for process in \
   if [[ -f "${process}" ]]; then
     rewrite_json "${process}" '
       .enable_support = 1 |
-      .support_type = "tree(auto)"
+      .support_type = "tree(auto)" |
+      .support_style = "organic"
     '
   fi
 done
+
+# Keep process compatibility aligned with the renamed Flashforge 0.4 preset name.
+FLASHFORGE_04_PROCESS="${PROFILES_DIR}/Flashforge/process/0.20mm Standard @Flashforge AD5M Pro 0.4 Nozzle.json"
+if [[ -f "${FLASHFORGE_04_PROCESS}" ]]; then
+  rewrite_json "${FLASHFORGE_04_PROCESS}" '
+    .compatible_printers = ((.compatible_printers // []) + [
+      "0 Flashforge Adventurer 5M Pro 0.4 Nozzle",
+      "Flashforge Adventurer 5M Pro 0.4 Nozzle"
+    ] | unique)
+  '
+fi
 
 # Make Flashforge Generic PLA/ABS selectable on the Dremel profile as requested.
 for filament in \
@@ -159,7 +174,11 @@ for filament in \
   "${PROFILES_DIR}/Flashforge/filament/Flashforge Generic ABS.json"; do
   if [[ -f "${filament}" ]]; then
     rewrite_json "${filament}" '
-      .compatible_printers = ((.compatible_printers // []) + ["Dremel 3D45", "Dremel 3D45 0.4 nozzle"] | unique)
+      .compatible_printers = ((.compatible_printers // []) + [
+        "Dremel 3D45",
+        "Dremel 3D45 0.4 nozzle",
+        "0 Flashforge Adventurer 5M Pro 0.4 Nozzle"
+      ] | unique)
     '
   fi
 done
