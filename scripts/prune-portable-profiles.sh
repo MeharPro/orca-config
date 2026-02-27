@@ -138,6 +138,19 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
   .default_bed_type = "Textured PEI Plate"
 '
 
+# Enforce Textured PEI as the default bed type across Flashforge printer presets.
+for machine in "${PROFILES_DIR}/Flashforge/machine/"*.json; do
+  if [[ -f "${machine}" ]]; then
+    rewrite_json "${machine}" '
+      if ((.type == "machine" and has("printer_model")) or .type == "machine_model") then
+        .default_bed_type = "Textured PEI Plate"
+      else
+        .
+      end
+    '
+  fi
+done
+
 # Enable supports by default for the curated print profiles.
 rewrite_json "${PROFILES_DIR}/Dremel/process/Dremel_3D45_Process_Optimized.json" '
   .enable_support = 1 |
