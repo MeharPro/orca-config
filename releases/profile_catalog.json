@@ -1,6 +1,6 @@
 {
-  "generated_at_utc": "2026-02-27T16:13:26Z",
-  "source_zip": "rev58_OrcaSlicer_Windows_V2.3.1_portable_with_configs.zip",
+  "generated_at_utc": "2026-03-24T09:47:45Z",
+  "source_zip": "rev83_OrcaSlicer_Windows_V2.3.2_portable_with_configs.zip",
   "printers": [
     "Dremel 3D45",
     "Flashforge Adventurer 5M Pro"
@@ -169,7 +169,17 @@
       "filaments": [],
       "processes": []
     },
+    "LONGER": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
     "Lulzbot": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "M3D": {
       "printers": [],
       "filaments": [],
       "processes": []
@@ -180,6 +190,11 @@
       "processes": []
     },
     "Mellow": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "OpenEYE": {
       "printers": [],
       "filaments": [],
       "processes": []
@@ -215,6 +230,11 @@
       "processes": []
     },
     "Qidi": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "RH3D": {
       "printers": [],
       "filaments": [],
       "processes": []
@@ -290,6 +310,11 @@
       "processes": []
     },
     "Vzbot": {
+      "printers": [],
+      "filaments": [],
+      "processes": []
+    },
+    "WEMAKE3D": {
       "printers": [],
       "filaments": [],
       "processes": []
