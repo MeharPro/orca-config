@@ -1,13 +1,13 @@
 {
-  "tag_name": "v2.3.1",
-  "upstream_release_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.1",
+  "tag_name": "v2.3.2",
+  "upstream_release_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2",
   "asset": {
-    "id": 300638970,
-    "name": "OrcaSlicer_Mac_universal_V2.3.1.dmg",
-    "size": 202438959,
+    "id": 379717806,
+    "name": "OrcaSlicer_Mac_universal_V2.3.2.dmg",
+    "size": 224627467,
     "content_type": "application/x-apple-diskimage",
-    "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.1/OrcaSlicer_Mac_universal_V2.3.1.dmg",
-    "updated_at": "2025-10-05T02:36:26Z"
+    "browser_download_url": "https://github.com/OrcaSlicer/OrcaSlicer/releases/download/v2.3.2/OrcaSlicer_Mac_universal_V2.3.2.dmg",
+    "updated_at": "2026-03-23T12:51:13Z"
   },
-  "custom_asset_name": "OrcaSlicer_Mac_universal_V2.3.1_with_configs.dmg"
+  "custom_asset_name": "OrcaSlicer_Mac_universal_V2.3.2_with_configs.dmg"
 }

@@ -1,59 +1,170 @@
 # OrcaSlicer Latest Release
 
-- Tag: v2.3.1
-- Name: OrcaSlicer v2.3.1 Official Release
-- Published: 2025-10-05T05:59:05Z
-- URL: https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.1
+- Tag: v2.3.2
+- Name: OrcaSlicer V2.3.2 Official Release
+- Published: 2026-03-23T13:08:14Z
+- URL: https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2
 
 ## Notes
 
-This is the official release of OrcaSlicer 2.3.1.
+# What's Changed
 
-We have fixed some bugs and made several improvements.
+This is OrcaSlicer V2.3.2, the stable release. This release addresses a security vulnerability in 3MF file import, adds a configurable wipe tower type setting, delivers extensive Linux and Flatpak improvements, fixes a CLI segfault, and includes UI refinements like dynamic title bar sizing and accordion sidebar tabs.
 
-**NOTE** I want to give a shout-out to Ian Bassi (@ianalexis). OrcaSlicer’s [WIKI](https://github.com/SoftFever/OrcaSlicer/wiki) is now AWESOME thanks to his fantastic work.
+> [!NOTE]
+> **For Linux users:** The official Flathub version will be available soon.
 
-## What's Changed
-### Bug fixes:
-* fix a regression bug that wrong printer model for Prusa MK3S and MINI in 2.3.1 beta by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10821
-* Enhance GCode handling for Z-axis movements by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10803
-* Fix a crash issue when importing a 3MF file saved from version 2.3.1-alpha as geometry only by @SoftFever 
-* Disable smooth sprial in input_shaping calibrations by @ianalexis in https://github.com/SoftFever/OrcaSlicer/pull/10748
+For features introduced earlier in the v2.3.2 cycle, please refer to:
+[v2.3.2-beta](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-beta) · [v2.3.2-beta2](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-beta2) · [v2.3.2-rc](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-rc) · [v2.3.2-rc2](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-rc2)
 
-### Profiles and documents and miscellaneous:
-* Add support for OrcaSlicer 2.3.1-alpha infill rotation template warning by @SoftFever 
-* Reflect swapped mouse buttons in Help → Keyboard Shortcuts by @kisslorand in https://github.com/SoftFever/OrcaSlicer/pull/10647
-* [Profile]parameters modified in printer file by @InnovatiQ-Additive in https://github.com/SoftFever/OrcaSlicer/pull/10394
-* Fix variable name comment and message by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10302
-* Fixes 50 Compiler Warnings: Add SYSTEM toCMakeLists.txt by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10653
-* Fixes 999 CMake Warnings by @rubienr in https://github.com/SoftFever/OrcaSlicer/pull/10729
-* Update TURKISH translations (V2.3.1-beta) by @GlauTechCo in https://github.com/SoftFever/OrcaSlicer/pull/10726
-* Update Anycubic Kobra 2 Neo machine profile fine tune end gcode by @frawg in https://github.com/SoftFever/OrcaSlicer/pull/10742
-* Shellcheck everything by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10730
-* Add a once-daily Build All which skips caches by @coryrc in https://github.com/SoftFever/OrcaSlicer/pull/10731
-* Add Afinia 3d printer and update tree_support_tip_diameter option for Tiertime printers by @GuoGeTiertime in https://github.com/SoftFever/OrcaSlicer/pull/10705
-* [PROFILE]Add Sovol SV01 by @M4ketech in https://github.com/SoftFever/OrcaSlicer/pull/10723
-* [QOL] Remember slider position for single layer mode in preview by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10758
-* Improve the pt-BR translation by @afmenez in https://github.com/SoftFever/OrcaSlicer/pull/10837
-* Fix grid lines origin for multiple plates by @yw4z in https://github.com/SoftFever/OrcaSlicer/pull/10724
-* Update Q2 print height by @HYzd766 in https://github.com/SoftFever/OrcaSlicer/pull/10843
-* Add Sovol SV08 MAX profiles from Sovol's repo by @arachnist in https://github.com/SoftFever/OrcaSlicer/pull/10768
-* Revamp OrcaSlicer updater by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10884
-* Update DMG creation process in build workflow by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10891
-* Update OrcaSlicer_tr.po by @whizosk in https://github.com/SoftFever/OrcaSlicer/pull/10856
-* Add a new printer Model with Flyingbear by @FlyingbearOfficial in https://github.com/SoftFever/OrcaSlicer/pull/10889
-* [PROFILE]add Rolohaun Delta Flyer Refit by @SoftFever in https://github.com/SoftFever/OrcaSlicer/pull/10893
-* [PROFILE] fix for Ender 3 V3 KE by @maoravni in https://github.com/SoftFever/OrcaSlicer/pull/10860
-* update de for 2.3.1 after update locale by @hliebscher in https://github.com/SoftFever/OrcaSlicer/pull/10912
-* [Profiles] Fix bed_exclude_area excluding the whole bed on Anycubic Kobra 3 by @ErikGS in https://github.com/SoftFever/OrcaSlicer/pull/10914
+# 🌊 New Features & Improvements
 
+* **Configurable wipe tower type** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12781
+    Adds a new printer-level setting to select the wipe tower type, instead of it being determined solely by the printer model. Type 2 is generally recommended for MMU, filament cutter, and tool changer setups.
 
------------------------------
-## Support
-OrcaSlicer remains free and open source, but behind every release lies countless hours of development, testing, and maintenance. If this software helps you bring ideas to life, please consider supporting the team.
-Your contributions directly fund hosting infrastructure, development tools, and—most importantly—help the developers dedicate time to making OrcaSlicer even better.
-Thank you for being part of this journey! 🙏
+    <img width="600" alt="Wipe tower type setting" src="https://github.com/user-attachments/assets/04bc5c42-88c4-458a-a933-a22f8408b6a8" />
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/G2G5IP3CP)
-Or 
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/softfever3d)
+* **Default values in tooltips for more option types** by @valerii-bokhan in https://github.com/OrcaSlicer/OrcaSlicer/pull/12508
+    Extends the tooltip default-value display (introduced in RC) to Percent, FloatOrPercent, String, and Bool config option types. Default values are sourced from parent profiles rather than hardcoded Orca defaults.
+
+    <img width="600" alt="Default values in tooltips" src="https://github.com/user-attachments/assets/24b5807c-b477-4639-8bb2-5f24d812799f" />
+
+* **Improved MMU detection via Moonraker database** by @ammmze in https://github.com/OrcaSlicer/OrcaSlicer/pull/12764
+    Happy Hare now writes MMU lane data to the Moonraker database (similar to AFC), so detection has been normalized. The Moonraker database is checked first, providing more reliable multi-material system detection and access to vendor name data.
+
+* **Allow cancellation during beam interlocking generation** by @Noisyfox in https://github.com/OrcaSlicer/OrcaSlicer/pull/12759
+    Beam interlocking generation can now be cancelled mid-process. Previously, certain parameter combinations could cause generation to take several minutes with no way to stop it.
+
+* **Dynamic title bar with longer project names** by @yw4z in https://github.com/OrcaSlicer/OrcaSlicer/pull/12730
+    The title bar now dynamically expands to use all available space, supporting long project names with ellipsis truncation. Also fixes window buttons being clipped at minimum width on Windows and a thin titlebar on Linux. Fixes #12723.
+
+    ![explorer_l92JNSeq3v](https://github.com/user-attachments/assets/aa0b3ff1-c155-46b5-abc8-cf8167db18a7)
+
+* **Accordion style main tabs** by @yw4z in https://github.com/OrcaSlicer/OrcaSlicer/pull/12772
+    main tabs now automatically collapse to icon-only mode when the window is too small, ensuring the Slice/Print buttons always remain visible. Fixes #12723.
+
+    ![Accordion sidebar tabs](https://github.com/user-attachments/assets/848331ee-0206-41a8-961f-e65e68ca5f56)
+
+* **Snapmaker esthetic filament sub-types** by @gaaat98 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12699
+    The Snapmaker Printer Agent now recognizes esthetic filament sub-types (wood-infused, matte, marble) for better profile matching instead of falling back to generic PLA.
+
+* **Move adaptive flowrate to developer mode** by @Sabriel-Koh in https://github.com/OrcaSlicer/OrcaSlicer/pull/12688
+    The "Adaptive Volumetric Speed" setting is now hidden behind developer mode, with a clarified tooltip noting it is experimental.
+
+# 🛠️ Bug Fixes
+
+* **Security fix: path traversal in 3MF import** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12860
+    Fixed a vulnerability where a crafted `.3mf` file could write to arbitrary filesystem locations via path traversal during import, potentially enabling code execution.
+
+* **Fix three regressions in multi-tool extruder tabs** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12680
+    Fixed dirty flags not showing for extruder-specific options, a crash when switching to non-first extruder tabs, and parameters on one extruder unintentionally affecting others.
+
+* **Fix crash when slicing multi-material print with wipe tower** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12682
+    Fixed a crash during G-code export for multi-material prints using WipeTower2 where mesh data was not initialized.
+
+* **Fix wipe tower positioned outside bed boundary** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12820
+    Fixed wipe tower being placed beyond the bed boundary after printer preset changes. The tower position is now re-clamped when presets change, and the estimated size includes the brim. Also fixes sliced results being immediately invalidated after first slicing.
+
+* **Optimize wipe tower warnings** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12821
+    Skips flushing volume validation for multi-tool printers (flushing volumes only apply to SEMM/BBL printers) and adds validation for conflicts between precise Z height and prime tower settings.
+
+* **Fix CLI segfault when using --info, --slice, or --export-3mf** by @niccolodevries in https://github.com/OrcaSlicer/OrcaSlicer/pull/12719
+    Fixed a segfault that made the CLI completely unusable. In CLI mode, render-data code was dereferencing a NULL plater pointer.
+
+* **Linux experience improvements** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12705 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12706
+    Fixes black screen on startup by skipping Freeze/Thaw during OpenGL loading, replaces global resize handler with dedicated edge panels for proper window resizing, and fixes the project/model name not appearing in the titlebar on Linux. Fixes #12636.
+
+    <img width="600" alt="Linux titlebar fix" src="https://github.com/user-attachments/assets/395744e7-6f78-4d3d-ba13-929bd77b19b6" />
+
+* **Fix crash on Linux when clicking assemble feature** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12739
+    Fixes #11715.
+
+* **Calibration dialog fixes** by @yw4z in https://github.com/OrcaSlicer/OrcaSlicer/pull/12702 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12752
+    Fixes incorrect validators attached to wrong controls, double-scaled text at higher DPI, UI layout refinements, and dialog sizing on Linux.
+
+* **Fix non-BBL printer filament grouping** by @Noisyfox in https://github.com/OrcaSlicer/OrcaSlicer/pull/12767
+    Fixed custom filament sequence not being properly handled on non-BBL printers by ensuring they go through the same reordering code path. Fixes #12449, #12766.
+
+* **Fix infinite loop with zero top solid infill density** by @RF47 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12762
+    Fixed OrcaSlicer entering an infinite loop when top layer solid infill density is set to zero.
+
+* **Fix hidden line type markers (wipe, seam, retract)** by @tome9111991 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12364
+    Fixed z-fighting where visibility markers for Wipe, Seam, and Retract/Unretract were obscured when overlaid on extrusion paths. Fixes #12100, #12556.
+
+    | Before | After |
+    |--------|-------|
+    | <img width="400" src="https://github.com/user-attachments/assets/e75be042-a526-4f8f-9fe3-42adef06dce7" /> | <img width="400" src="https://github.com/user-attachments/assets/24cea9c7-4817-417f-8fea-a057fcc62388" /> |
+
+* **Fix Flatpak locale support and app ID migration** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12751 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12879
+    Fixes translations not loading in Flatpak builds and updates the Flatpak application ID with migration code. Fixes #12714.
+
+* **Fix notifications unresponsive after G-code viewer collapsed** by @derrickwzb in https://github.com/OrcaSlicer/OrcaSlicer/pull/12689
+    Fixed notifications becoming unclickable after collapsing the G-code viewer panel.
+
+* **Fix hotkeys blocked when notification is shown** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12715
+    Fixed hotkeys (e.g., Tab) becoming unresponsive when notifications appear over the 3D canvas.
+
+* **Round flush volume matrix values to integers** by @folofse in https://github.com/OrcaSlicer/OrcaSlicer/pull/12672
+    Fixed decimal values in the flush volume matrix causing firmware metadata parsers to crash on some printers (notably Creality K2).
+
+* **Fix flushing dialog interaction and add Esc to close dialogs** by @derrickwzb in https://github.com/OrcaSlicer/OrcaSlicer/pull/12694 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12697
+    Fixed the flushing dialog being movable via trackpad overscrolling and added Escape key support to close dialogs.
+
+* **Warning for Hollow base pattern on non-tree supports** by @valerii-bokhan in https://github.com/OrcaSlicer/OrcaSlicer/pull/12710
+    Adds a warning when selecting "Hollow" base pattern for non-tree supports, informing that "Rectilinear" will be used instead.
+
+* **Fix crash in preset comparison dialog** by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12765
+* **Remove duplicate items from actual speed plot** by @yw4z in https://github.com/OrcaSlicer/OrcaSlicer/pull/12711
+* **Disable filament grouping button on non-H2D printers** by @Sabriel-Koh in https://github.com/OrcaSlicer/OrcaSlicer/pull/12693
+* **Remove leftover Bambu warning caption from dialogs** by @kisslorand in https://github.com/OrcaSlicer/OrcaSlicer/pull/12696
+* **Fix zoom button tooltip width miscalculation** by @derrickwzb in https://github.com/OrcaSlicer/OrcaSlicer/pull/12692
+* **Fix height calculation for preferred filament area** by @yw4z in https://github.com/OrcaSlicer/OrcaSlicer/pull/12660
+* **Fix plurals on GUI strings** by @afmenez in https://github.com/OrcaSlicer/OrcaSlicer/pull/12681
+* **Rename "flow rate" to "flow ratio" in calibration** by @RF47 and @kisslorand in https://github.com/OrcaSlicer/OrcaSlicer/pull/12773 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12800
+* **Standardize GUI strings** by @afmenez in https://github.com/OrcaSlicer/OrcaSlicer/pull/12665
+* **QoL tweaks** (filament temperature type fix, help link updates) by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12700
+* **Fix conversion to wxString** by @derrickwzb in https://github.com/OrcaSlicer/OrcaSlicer/pull/12698
+
+# 🎛️ Printer & Filament Profiles
+
+* **Creality K2** printer profiles (0.2/0.4/0.6/0.8mm nozzles) by @folofse in https://github.com/OrcaSlicer/OrcaSlicer/pull/12662. Fixes #11649.
+* **eSUN PLA Basic, Marble, and Matte** filament profiles by @Schildkroet in https://github.com/OrcaSlicer/OrcaSlicer/pull/12657
+* **Anet A8 Plus** printer profile by @jhfhngj in https://github.com/OrcaSlicer/OrcaSlicer/pull/12792
+* **Artillery M1 Pro** profile optimization by @liuyingmo in https://github.com/OrcaSlicer/OrcaSlicer/pull/12885
+* **FILL3D PLA Turbo** filament profile by @julianramirezarango-source in https://github.com/OrcaSlicer/OrcaSlicer/pull/12801
+* **VOLUMIC** profile update by @VOLUMIC in https://github.com/OrcaSlicer/OrcaSlicer/pull/12721
+* **Elegoo CC2** profile update by @thelegendtubaguy in https://github.com/OrcaSlicer/OrcaSlicer/pull/12215
+* **Qidi X-Max 4** 0.4 nozzle profile update by @HYzd766 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12716
+* **Generic PC** filament ID added by @HYzd766 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12756
+* Disable arc fitting for **Qidi** processes by @thelegendtubaguy in https://github.com/OrcaSlicer/OrcaSlicer/pull/12761
+* Set exclude objects enabled by default for **U1** printer to support dynamic MBL by @liutang in https://github.com/OrcaSlicer/OrcaSlicer/pull/12869
+* Profile version bump and cleanup by @SoftFever in https://github.com/OrcaSlicer/OrcaSlicer/pull/12889
+
+# 🗪 Localization
+
+* Czech translation updates by @jakubhencl in https://github.com/OrcaSlicer/OrcaSlicer/pull/12640 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12641, and @RF47 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12701
+* Brazilian Portuguese translations by @afmenez in https://github.com/OrcaSlicer/OrcaSlicer/pull/12664
+* Hungarian language updates by @kisslorand in https://github.com/OrcaSlicer/OrcaSlicer/pull/12686 and https://github.com/OrcaSlicer/OrcaSlicer/pull/12795
+* Russian localization fixes by @Felix14-v2 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12734
+* Turkish translation updates by @GlauTechCo in https://github.com/OrcaSlicer/OrcaSlicer/pull/12838
+* Traditional Chinese fixes by @RF47 in https://github.com/OrcaSlicer/OrcaSlicer/pull/12867
+* German translation updates by @hliebscher in https://github.com/OrcaSlicer/OrcaSlicer/pull/12875
+
+---
+
+# ❤️ Support OrcaSlicer
+
+> **OrcaSlicer is — and will remain — free and open source.**
+>
+> Every release represents countless hours of behind-the-scenes work: building features, fixing bugs, validating profiles, and testing across real machines. If this software helps you bring ideas to life, please consider supporting the project.
+>
+> Your contribution covers the essentials — from servers and development tools to filament, printer parts, and yes, the coffee that fuels those late nights. Community support drives the momentum that keeps innovation and quality moving forward.
+>
+> **Thank you for being part of the OrcaSlicer journey.** 🙏
+
+<p align="center">
+  <a href="https://ko-fi.com/G2G5IP3CP"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi"></a>
+</p>
+<p align="center">
+  <a href="https://paypal.me/softfever3d"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="Donate via PayPal"></a>
+</p>
