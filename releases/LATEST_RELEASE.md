@@ -11,8 +11,8 @@
 
 This is OrcaSlicer V2.3.2, the stable release. This release addresses a security vulnerability in 3MF file import, adds a configurable wipe tower type setting, delivers extensive Linux and Flatpak improvements, fixes a CLI segfault, and includes UI refinements like dynamic title bar sizing and accordion sidebar tabs.
 
-> [!NOTE]
-> **For Linux users:** The official Flathub version will be available soon.
+~~> [!NOTE]~~
+~~> **For Linux users:** The official Flathub version will be available soon.~~
 
 For features introduced earlier in the v2.3.2 cycle, please refer to:
 [v2.3.2-beta](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-beta) · [v2.3.2-beta2](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-beta2) · [v2.3.2-rc](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-rc) · [v2.3.2-rc2](https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.3.2-rc2)
