@@ -138,11 +138,19 @@ rewrite_json "${PROFILES_DIR}/Flashforge/machine/Flashforge Adventurer 5M Pro 0.
   .default_bed_type = "Textured PEI Plate"
 '
 
-# Enforce Textured PEI as the default bed type across Flashforge printer presets.
+# Enforce Flashforge defaults across machine presets. Keeping disable_m73 off
+# makes sliced G-code emit M73 remaining-time updates for printer displays.
 for machine in "${PROFILES_DIR}/Flashforge/machine/"*.json; do
   if [[ -f "${machine}" ]]; then
     rewrite_json "${machine}" '
-      if ((.type == "machine" and has("printer_model")) or .type == "machine_model") then
+      if .type == "machine" then
+        .disable_m73 = "0" |
+        if has("printer_model") then
+          .default_bed_type = "Textured PEI Plate"
+        else
+          .
+        end
+      elif .type == "machine_model" then
         .default_bed_type = "Textured PEI Plate"
       else
         .
